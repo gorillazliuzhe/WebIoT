@@ -27,8 +27,8 @@ namespace WebIoT
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Pi.Init<BootstrapWiringPi>();
-            services.AddSingleton(new UltrasonicHcsr04(Pi.Gpio[BcmPin.Gpio23], Pi.Gpio[BcmPin.Gpio24]));
+           
+            services.AddSingleton<UltrasonicHcsr04>(_ => new UltrasonicHcsr04(Pi.Gpio[BcmPin.Gpio23], Pi.Gpio[BcmPin.Gpio24]));
             services.AddControllersWithViews();
         }
 
@@ -47,7 +47,7 @@ namespace WebIoT
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-           
+            Pi.Init<BootstrapWiringPi>();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
