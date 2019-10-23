@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Unosquare.RaspberryIO;
+using Unosquare.RaspberryIO.Abstractions;
+using Unosquare.RaspberryIO.Peripherals;
 using Unosquare.WiringPi;
 
 namespace WebIoT
@@ -25,6 +27,8 @@ namespace WebIoT
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Pi.Init<BootstrapWiringPi>();
+            services.AddSingleton(new UltrasonicHcsr04(Pi.Gpio[BcmPin.Gpio23], Pi.Gpio[BcmPin.Gpio24]));
             services.AddControllersWithViews();
         }
 
@@ -43,7 +47,7 @@ namespace WebIoT
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            Pi.Init<BootstrapWiringPi>();
+           
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
