@@ -14,12 +14,12 @@ namespace WebIoT.Peripherals
         private bool disposedValue = false;
         private const int TriggerPin = 23; // 控制端
         private const int EchoPin = 24; // 接收端
-        private Thread _readWorker;
-        private Swan.Diagnostics.HighResolutionTimer _measurementTimer;
-        private readonly GpioController _controller = new GpioController();
+        private Thread readWorker;
+        private Swan.Diagnostics.HighResolutionTimer measurementTimer;
+        private readonly GpioController controller = new GpioController();
         public UltrasonicHcsr04Client()
         {
-            _readWorker = new Thread(PerformContinuousReads);
+            readWorker = new Thread(PerformContinuousReads);
         }
 
         /// <summary>
@@ -39,11 +39,11 @@ namespace WebIoT.Peripherals
         /// <returns></returns>
         public void Start()
         {
-            _controller.OpenPin(TriggerPin, PinMode.Output);
-            _controller.OpenPin(EchoPin, PinMode.Input);
-            _measurementTimer = new Swan.Diagnostics.HighResolutionTimer();
+            controller.OpenPin(TriggerPin, PinMode.Output);
+            controller.OpenPin(EchoPin, PinMode.Input);
+            measurementTimer = new Swan.Diagnostics.HighResolutionTimer();
             IsRunning = true;
-            _readWorker.Start();
+            readWorker.Start();
         }
 
         public void Stop() => IsRunning = false;
@@ -65,17 +65,17 @@ namespace WebIoT.Peripherals
         {
             try
             {
-                _controller.Write(TriggerPin, PinValue.Low);
+                controller.Write(TriggerPin, PinValue.Low);
                 Unosquare.RaspberryIO.Pi.Timing.SleepMicroseconds(2);
-                _controller.Write(TriggerPin, PinValue.High);
+                controller.Write(TriggerPin, PinValue.High);
                 Unosquare.RaspberryIO.Pi.Timing.SleepMicroseconds(12);
-                _controller.Write(TriggerPin, PinValue.Low);
+                controller.Write(TriggerPin, PinValue.Low);
                 WaitForValue(EchoPin, 0);
-                _measurementTimer.Start();
+                measurementTimer.Start();
                 WaitForValue(EchoPin, 1);
-                _measurementTimer.Stop();
-                var elapsedTime = _measurementTimer.ElapsedMicroseconds;
-                _measurementTimer.Reset();
+                measurementTimer.Stop();
+                var elapsedTime = measurementTimer.ElapsedMicroseconds;
+                measurementTimer.Reset();
                 var distance = elapsedTime / 58.0;
                 if (elapsedTime > NoObstaclePulseMicroseconds)
                     distance = NoObstacleDistance;
@@ -93,7 +93,8 @@ namespace WebIoT.Peripherals
             {
                 if (disposing)
                 {
-                    _controller.Dispose();
+                    readWorker = null;
+                    controller.Dispose();
                 }
                 disposedValue = true;
             }
@@ -117,7 +118,7 @@ namespace WebIoT.Peripherals
                 {
                     throw new TimeoutException();
                 }
-            } while (_controller.Read(pin) == status);
+            } while (controller.Read(pin) == status);            
         }
     }
 }

@@ -7,12 +7,12 @@ using WebIoT.Peripherals;
 
 namespace WebIoT.Controllers
 {
+    // http://192.168.1.88/led/LedOn
     public class LedController : Controller
     {
         private readonly LedClient _ledClient;
         public LedController(LedClient ledClient)
         {
-            Unosquare.RaspberryIO.Pi.Timing.SleepMicroseconds(2);
             _ledClient = ledClient;
         }
         public IActionResult LedOn()

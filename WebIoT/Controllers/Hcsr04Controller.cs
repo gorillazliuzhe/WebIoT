@@ -8,10 +8,10 @@ using WebIoT.Peripherals;
 
 namespace WebIoT.Controllers
 {
+    // http://192.168.1.88/Hcsr04/Hcsr04Off
     public class Hcsr04Controller : Controller
     {
         private readonly UltrasonicHcsr04Client _hcsr04;
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         public Hcsr04Controller(UltrasonicHcsr04Client hcsr04)
         {
             _hcsr04 = hcsr04;
