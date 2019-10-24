@@ -1,17 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Unosquare.RaspberryIO;
-using Unosquare.RaspberryIO.Abstractions;
-using Unosquare.RaspberryIO.Peripherals;
-using Unosquare.WiringPi;
+using WebIoT.Peripherals;
 
 namespace WebIoT
 {
@@ -27,8 +19,10 @@ namespace WebIoT
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
-            services.AddSingleton<UltrasonicHcsr04>(_ => new UltrasonicHcsr04(Pi.Gpio[BcmPin.Gpio23], Pi.Gpio[BcmPin.Gpio24]));
+
+            //services.AddSingleton<UltrasonicHcsr04>(_ => new UltrasonicHcsr04(Pi.Gpio[BcmPin.Gpio23], Pi.Gpio[BcmPin.Gpio24]));
+            services.AddSingleton<LedClient>();
+            services.AddSingleton<UltrasonicHcsr04Client>();
             services.AddControllersWithViews();
         }
 
@@ -47,7 +41,7 @@ namespace WebIoT
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            Pi.Init<BootstrapWiringPi>();
+            Unosquare.RaspberryIO.Pi.Init<Unosquare.WiringPi.BootstrapWiringPi>();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
