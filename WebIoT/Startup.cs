@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebIoT.Peripherals;
+using WebIoT.Peripherals.L298N;
 
 namespace WebIoT
 {
@@ -23,6 +24,7 @@ namespace WebIoT
             //services.AddSingleton<UltrasonicHcsr04>(_ => new UltrasonicHcsr04(Pi.Gpio[BcmPin.Gpio23], Pi.Gpio[BcmPin.Gpio24]));
             services.AddSingleton<LedClient>();
             services.AddSingleton<UltrasonicHcsr04Client>();
+            services.AddSingleton<L298NClient>();
             services.AddControllersWithViews();
         }
 
