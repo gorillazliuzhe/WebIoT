@@ -41,11 +41,9 @@ namespace WebIoT.Peripherals.L298N
         /// 前进
         /// </summary>
         /// <param name="sd">速度</param>
-        public void Up(int sd, int zy = 2)
+        public void Up(int zy = 2)
         {
             List<int> DutyCycle = new List<int> { 30, 40, 50, 60, 70, 80, 90, 100 };
-            //ena.PwmRegister = 0;
-            //enb.PwmRegister = 0;
             switch (zy)
             {
                 case 1:

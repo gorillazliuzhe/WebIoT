@@ -15,14 +15,14 @@ namespace WebIoT.Controllers
             _l298n = l298n;
         }
 
-        public IActionResult Up(int sd=40,int zy=2)
+        public IActionResult Up(int zy=2)
         {
-            _l298n.Up(sd,zy);
+            _l298n.Up(zy);
             return Content("前进");
         }
-        public IActionResult Down(int sd = 40)
+        public IActionResult Down()
         {
-            _l298n.Down(sd);
+            _l298n.Down();
             return Content("后退");
         }
         public IActionResult Left()
