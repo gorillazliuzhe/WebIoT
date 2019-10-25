@@ -15,7 +15,7 @@ namespace WebIoT.Peripherals.L298N
         private IGpioPin in3 = Pi.Gpio[21];
         private IGpioPin in4 = Pi.Gpio[26];
         private GpioPin ena = (GpioPin)Pi.Gpio[18];
-        private GpioPin enb = (GpioPin)Pi.Gpio[19];
+        private GpioPin enb = (GpioPin)Pi.Gpio[12]; // 19
         private bool disposedValue;
 
         public L298NClient()
@@ -36,17 +36,33 @@ namespace WebIoT.Peripherals.L298N
         /// 前进
         /// </summary>
         /// <param name="sd">速度</param>
-        public void Up(int sd)
+        public void Up(int sd, int zy = 2)
         {
             List<int> DutyCycle = new List<int> { 30, 40, 50, 60, 70, 80, 90, 100 };
-            ena.PwmRegister = 0;
-            enb.PwmRegister = 0;
-            in1.Write(GpioPinValue.Low);
-            in2.Write(GpioPinValue.High);
-            in3.Write(GpioPinValue.Low);
-            in4.Write(GpioPinValue.High);
-            ena.PwmRegister = sd;
-            enb.PwmRegister = sd;
+            //ena.PwmRegister = 0;
+            //enb.PwmRegister = 0;
+            switch (zy)
+            {
+                case 1:
+                    in1.Write(GpioPinValue.Low);
+                    in2.Write(GpioPinValue.High);
+                    ena.PwmRegister = 80;
+                    break;
+                case 2:
+                    in3.Write(GpioPinValue.Low);
+                    in4.Write(GpioPinValue.High);
+                    enb.PwmRegister = 80;
+                    break;
+                default:
+                    in1.Write(GpioPinValue.Low);
+                    in2.Write(GpioPinValue.High);
+                    in3.Write(GpioPinValue.Low);
+                    in4.Write(GpioPinValue.High);
+                    ena.PwmRegister = 80;
+                    enb.PwmRegister = 80;
+                    break;
+            }
+
         }
         /// <summary>
         /// 后退

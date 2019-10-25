@@ -15,9 +15,9 @@ namespace WebIoT.Controllers
             _l298n = l298n;
         }
 
-        public IActionResult Up(int sd=40)
+        public IActionResult Up(int sd=40,int zy=2)
         {
-            _l298n.Up(sd);
+            _l298n.Up(sd,zy);
             return Content("前进");
         }
         public IActionResult Down(int sd = 40)
