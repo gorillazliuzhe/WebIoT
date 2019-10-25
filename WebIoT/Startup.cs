@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebIoT.Hubs;
 using WebIoT.Peripherals;
 using WebIoT.Peripherals.L298N;
 
@@ -25,6 +26,7 @@ namespace WebIoT
             services.AddSingleton<LedClient>();
             services.AddSingleton<UltrasonicHcsr04Client>();
             services.AddSingleton<L298NClient>();
+            services.AddSignalR();
             services.AddControllersWithViews();
         }
 
@@ -43,7 +45,7 @@ namespace WebIoT
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            Unosquare.RaspberryIO.Pi.Init<Unosquare.WiringPi.BootstrapWiringPi>();
+            //Unosquare.RaspberryIO.Pi.Init<Unosquare.WiringPi.BootstrapWiringPi>();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
@@ -51,6 +53,7 @@ namespace WebIoT
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<ChatHub>("/chathub");
             });
         }
     }

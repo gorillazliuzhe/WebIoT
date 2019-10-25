@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using WebIoT.Hubs;
 using WebIoT.Peripherals;
 
 namespace WebIoT.Controllers
@@ -12,17 +14,19 @@ namespace WebIoT.Controllers
     public class Hcsr04Controller : Controller
     {
         private readonly UltrasonicHcsr04Client _hcsr04;
-        public Hcsr04Controller(UltrasonicHcsr04Client hcsr04)
+        private readonly IHubContext<ChatHub> _chatHub;
+        public Hcsr04Controller(UltrasonicHcsr04Client hcsr04, IHubContext<ChatHub> chatHub)
         {
             _hcsr04 = hcsr04;
+            _chatHub= chatHub;
         }
         public IActionResult Hcsr04On()
         {
-            _hcsr04.OnDataAvailable += (s, e) =>
+            _hcsr04.OnDataAvailable += async (s, e) =>
             {
                 if (!e.IsValid)
                 {
-                    Console.WriteLine("声波没有返回,被折射掉了.");
+                    await _chatHub.Clients.Group("3603631297").SendAsync("ReceiveMessage", "声波没有返回,被折射掉了.");
                 }
                 else if (e.HasObstacles)
                 {
