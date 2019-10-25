@@ -12,10 +12,10 @@ namespace WebIoT.Peripherals.L298N
     {
         private IGpioPin in1 = Pi.Gpio[16];
         private IGpioPin in2 = Pi.Gpio[20];
-        private IGpioPin in3 = Pi.Gpio[21];
-        private IGpioPin in4 = Pi.Gpio[26];
-        private GpioPin ena = (GpioPin)Pi.Gpio[18];
-        private GpioPin enb = (GpioPin)Pi.Gpio[12]; // 19
+        private IGpioPin in3 = Pi.Gpio[5];
+        private IGpioPin in4 = Pi.Gpio[6];
+        //private GpioPin ena = (GpioPin)Pi.Gpio[18];
+        //private GpioPin enb = (GpioPin)Pi.Gpio[19]; // 19
         private bool disposedValue;
 
         public L298NClient()
@@ -24,12 +24,17 @@ namespace WebIoT.Peripherals.L298N
             in2.PinMode = GpioPinDriveMode.Output;
             in3.PinMode = GpioPinDriveMode.Output;
             in4.PinMode = GpioPinDriveMode.Output;
-            ena.PinMode = GpioPinDriveMode.PwmOutput;
-            ena.PwmMode = PwmMode.Balanced;
-            ena.PwmClockDivisor = 2;
-            enb.PinMode = GpioPinDriveMode.PwmOutput;
-            enb.PwmMode = PwmMode.Balanced;
-            enb.PwmClockDivisor = 2;
+            //ena.PinMode = GpioPinDriveMode.Output;
+            //enb.PinMode = GpioPinDriveMode.Output;
+            #region 使用PWM一面电机快一面慢 这里不用了
+            //ena.PinMode = GpioPinDriveMode.PwmOutput;
+            //ena.PwmMode = PwmMode.Balanced;
+            //ena.PwmClockDivisor = 2;
+            //enb.PinMode = GpioPinDriveMode.PwmOutput;
+            //enb.PwmMode = PwmMode.Balanced;
+            //enb.PwmClockDivisor = 2;
+            #endregion
+
         }
 
         /// <summary>
@@ -46,20 +51,16 @@ namespace WebIoT.Peripherals.L298N
                 case 1:
                     in1.Write(GpioPinValue.Low);
                     in2.Write(GpioPinValue.High);
-                    ena.PwmRegister = 80;
                     break;
                 case 2:
                     in3.Write(GpioPinValue.Low);
                     in4.Write(GpioPinValue.High);
-                    enb.PwmRegister = 80;
                     break;
                 default:
                     in1.Write(GpioPinValue.Low);
                     in2.Write(GpioPinValue.High);
                     in3.Write(GpioPinValue.Low);
                     in4.Write(GpioPinValue.High);
-                    ena.PwmRegister = 80;
-                    enb.PwmRegister = 80;
                     break;
             }
 
@@ -68,16 +69,12 @@ namespace WebIoT.Peripherals.L298N
         /// 后退
         /// </summary>
         /// <param name="sd">速度</param>
-        public void Down(int sd)
+        public void Down()
         {
-            ena.PwmRegister = 0;
-            enb.PwmRegister = 0;
             in1.Write(GpioPinValue.High);
             in2.Write(GpioPinValue.Low);
             in3.Write(GpioPinValue.High);
             in4.Write(GpioPinValue.Low);
-            ena.PwmRegister = sd;
-            enb.PwmRegister = sd;
         }
         public void Right()
         {
@@ -85,7 +82,6 @@ namespace WebIoT.Peripherals.L298N
             in2.Write(GpioPinValue.High);
             in3.Write(GpioPinValue.Low);
             in4.Write(GpioPinValue.Low);
-            ena.PwmRegister = 40;
         }
         public void Left()
         {
@@ -93,15 +89,12 @@ namespace WebIoT.Peripherals.L298N
             in2.Write(GpioPinValue.Low);
             in3.Write(GpioPinValue.Low);
             in4.Write(GpioPinValue.High);
-            enb.PwmRegister = 40;
         }
         /// <summary>
         /// 停止
         /// </summary>
         public void Stop()
         {
-            ena.PwmRegister = 0;
-            enb.PwmRegister = 0;
             in1.Write(GpioPinValue.Low);
             in2.Write(GpioPinValue.Low);
             in3.Write(GpioPinValue.Low);
@@ -118,12 +111,6 @@ namespace WebIoT.Peripherals.L298N
                     in2 = null;
                     in3 = null;
                     in4 = null;
-                    ena = null;
-                    ena = null;
-                    ena = null;
-                    enb = null;
-                    enb = null;
-                    enb = null;
                 }
                 disposedValue = true;
             }

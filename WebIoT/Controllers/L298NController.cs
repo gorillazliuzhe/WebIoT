@@ -40,5 +40,11 @@ namespace WebIoT.Controllers
             _l298n.Stop();
             return Content("停止");
         }
+
+        public IActionResult Dis()
+        {
+            _l298n.Dispose(true);
+            return Content("销毁了");
+        }
     }
 }
