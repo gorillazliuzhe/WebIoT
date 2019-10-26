@@ -15,9 +15,14 @@ namespace WebIoT.Controllers
             _l298n = l298n;
         }
 
-        public IActionResult Up(int zy=2)
+        public IActionResult Start()
         {
-            _l298n.Up(zy);
+            _l298n.Start();
+            return Content("开启WiFi控制");
+        }
+        public IActionResult Up()
+        {
+            _l298n.Up();
             return Content("前进");
         }
         public IActionResult Down()
@@ -35,16 +40,16 @@ namespace WebIoT.Controllers
             _l298n.Right();
             return Content("右转");
         }
+        public IActionResult Pause()
+        {
+            _l298n.Pause();
+            return Content("右转");
+        }
         public IActionResult Stop()
         {
             _l298n.Stop();
-            return Content("停止");
+            return Content("停止WiFi控制");
         }
 
-        public IActionResult Dis()
-        {
-            _l298n.Dispose(true);
-            return Content("销毁了");
-        }
     }
 }

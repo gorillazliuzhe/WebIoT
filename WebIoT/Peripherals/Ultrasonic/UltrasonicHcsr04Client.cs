@@ -35,9 +35,14 @@ namespace WebIoT.Peripherals
         /// <returns></returns>
         public void Start()
         {
-
-            controller.OpenPin(TriggerPin, PinMode.Output);
-            controller.OpenPin(EchoPin, PinMode.Input);
+            if (!controller.IsPinOpen(TriggerPin))
+            {
+                controller.OpenPin(TriggerPin, PinMode.Output);
+            }
+            if (!controller.IsPinOpen(EchoPin))
+            {
+                controller.OpenPin(EchoPin, PinMode.Input);
+            }           
             measurementTimer = new Swan.Diagnostics.HighResolutionTimer();
             IsRunning = true;
             if (readWorker == null)
@@ -50,8 +55,14 @@ namespace WebIoT.Peripherals
         public void Stop()
         {
             IsRunning = false;
-            controller.ClosePin(TriggerPin);
-            controller.ClosePin(EchoPin);
+            if (controller.IsPinOpen(TriggerPin))
+            {
+                controller.ClosePin(TriggerPin);
+            }
+            if (controller.IsPinOpen(EchoPin))
+            {
+                controller.ClosePin(EchoPin);
+            }                    
         }
 
 

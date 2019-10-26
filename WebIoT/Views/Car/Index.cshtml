@@ -19,6 +19,11 @@
         <label for="bz"><em></em></label>
     </li>
     <li>
+        <input type="checkbox" name="Storage2" id="yk" onclick="KZWIFIYK(this)" checked="checked" />
+        WiFi遥控
+        <label for="yk"><em></em></label>
+    </li>
+    <li>
         <input type="checkbox" name="Storage2" id="yk" onclick="KZYK(this)" />
         红外遥控
         <label for="yk"><em></em></label>
@@ -27,32 +32,32 @@
 
 
 <div class="control-wrapper">
-    <div class="control-btn control-top">
+    <div class="control-btn control-top" onclick="carmove(this,'up')">
         <i class="fa fa-chevron-up">↑</i>
         <div class="control-inner-btn control-inner"></div>
     </div>
-    <div class="control-btn control-left">
+    <div class="control-btn control-left" onclick="carmove(this,'left')">
         <i class="fa fa-chevron-left">←</i>
         <div class="control-inner-btn control-inner"></div>
     </div>
-    <div class="control-btn control-bottom">
+    <div class="control-btn control-bottom" onclick="carmove(this,'down')">
         <i class="fa fa-chevron-down"></i>
         <div class="control-inner-btn control-inner"></div>
     </div>
-    <div class="control-btn control-right">
+    <div class="control-btn control-right" onclick="carmove(this,'right')">
         <i class="fa fa-chevron-right">→</i>
         <div class="control-inner-btn control-inner"></div>
     </div>
-    <div class="control-round">
+    <div class="control-round" onclick="carmove(this,'pause')">
         <div class="control-round-inner">
-            <i class="fa fa-pause-circle">stop</i>
+            <i class="fa fa-pause-circle">P</i>
         </div>
     </div>
 </div>
 
 <div class="text-center">
     <h5>超声波数据</h5>
-    <p id="csbdata" style="color:Red">32.78CM</p>
+    <p id="csbdata" style="color:Red"></p>
 </div>
 
 <div class="text-center">
@@ -87,13 +92,56 @@
                 });
             }
         }
-
-
-
-
-
-
-
+        // wifi遥控
+        var isstop = false;
+        function KZWIFIYK(th) {
+            if ($(th).is(':checked')) {
+                $.get("/L298N/Start", function (data) {
+                    console.log(data);
+                    isstop = false;
+                });
+            } else {
+                $.get("/L298N/Stop", function (data) {
+                    console.log(data);
+                    isstop = true;
+                });
+            }
+        }
+        // 小车移动
+        function carmove(th, type) {
+            if (!isstop) {
+                switch (type) {
+                    case "up":
+                        $.get("/L298N/Up", function (data) {
+                            console.log(data);
+                        });
+                        break;
+                     case "down":
+                        $.get("/L298N/Down", function (data) {
+                            console.log(data);
+                        });
+                        break;
+                     case "left":
+                        $.get("/L298N/Left", function (data) {
+                            console.log(data);
+                        });
+                        break;
+                     case "right":
+                        $.get("/L298N/Right", function (data) {
+                            console.log(data);
+                        });
+                        break;
+                    case "pause":
+                        $.get("/L298N/Pause", function (data) {
+                            console.log(data);
+                        });
+                        break;
+                }
+                $(th).siblings('div').removeClass('CarClick');
+                $(th).addClass('CarClick');
+            }
+        }
+      
         // signalR 接受传感器数据
         var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub?groupName=lz").build();
 
@@ -115,6 +163,8 @@
         });
 
         connection.onclose(async () => {
+            $("#csbdata").empty();
+            $("#bzdata").empty();
             console.info('监听到链接关闭');
             await start();
         });

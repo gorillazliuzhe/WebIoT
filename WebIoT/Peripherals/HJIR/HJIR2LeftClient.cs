@@ -32,7 +32,10 @@ namespace WebIoT.Peripherals.HJIR
         /// </summary>
         public void Start()
         {
-            controller.OpenPin(inPin, PinMode.Input);
+            if (!controller.IsPinOpen(inPin))
+            {
+                controller.OpenPin(inPin, PinMode.Input);
+            }         
             IsRunning = true;
             if (readWorker == null)
             {
@@ -46,7 +49,10 @@ namespace WebIoT.Peripherals.HJIR
         /// </summary>
         public void Stop()
         {
-            controller.ClosePin(inPin);
+            if (controller.IsPinOpen(inPin))
+            {
+                controller.ClosePin(inPin);
+            }
             IsRunning = false;            
         }
         private void PerformContinuousReads(object obj)

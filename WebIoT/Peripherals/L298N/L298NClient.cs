@@ -1,67 +1,37 @@
 ﻿using System.Collections.Generic;
-using Unosquare.RaspberryIO;
-using Unosquare.RaspberryIO.Abstractions;
-using Unosquare.WiringPi;
+using System.Device.Gpio;
 
 namespace WebIoT.Peripherals.L298N
 {
     /// <summary>
-    /// 使用第三方库实现,原生支持没找到PWM Demo
+    /// 原生支持没找到PWM 如需使用PWM请使用第三方库,这里由于PWM左右速度不一致就不加 变速功能
     /// </summary>
     public class L298NClient
     {
-        private IGpioPin in1 = Pi.Gpio[16];
-        private IGpioPin in2 = Pi.Gpio[20];
-        private IGpioPin in3 = Pi.Gpio[5];
-        private IGpioPin in4 = Pi.Gpio[6];
-        //private GpioPin ena = (GpioPin)Pi.Gpio[18];
-        //private GpioPin enb = (GpioPin)Pi.Gpio[19]; // 19
+        private const int in1 = 16;
+        private const int in2 = 20;
+        private const int in3 = 21;
+        private const int in4 = 26;
+        private readonly GpioController _controller = new GpioController();
         private bool disposedValue;
+        private readonly object _locker = new object();
 
         public L298NClient()
         {
-            in1.PinMode = GpioPinDriveMode.Output;
-            in2.PinMode = GpioPinDriveMode.Output;
-            in3.PinMode = GpioPinDriveMode.Output;
-            in4.PinMode = GpioPinDriveMode.Output;
-            //ena.PinMode = GpioPinDriveMode.Output;
-            //enb.PinMode = GpioPinDriveMode.Output;
-            #region 使用PWM一面电机快一面慢 这里不用了
-            //ena.PinMode = GpioPinDriveMode.PwmOutput;
-            //ena.PwmMode = PwmMode.Balanced;
-            //ena.PwmClockDivisor = 2;
-            //enb.PinMode = GpioPinDriveMode.PwmOutput;
-            //enb.PwmMode = PwmMode.Balanced;
-            //enb.PwmClockDivisor = 2;
-            #endregion
-
+            Start();
+            Pause();
         }
 
         /// <summary>
         /// 前进
         /// </summary>
         /// <param name="sd">速度</param>
-        public void Up(int zy = 2)
+        public void Up()
         {
-            List<int> DutyCycle = new List<int> { 30, 40, 50, 60, 70, 80, 90, 100 };
-            switch (zy)
-            {
-                case 1:
-                    in1.Write(GpioPinValue.Low);
-                    in2.Write(GpioPinValue.High);
-                    break;
-                case 2:
-                    in3.Write(GpioPinValue.Low);
-                    in4.Write(GpioPinValue.High);
-                    break;
-                default:
-                    in1.Write(GpioPinValue.Low);
-                    in2.Write(GpioPinValue.High);
-                    in3.Write(GpioPinValue.Low);
-                    in4.Write(GpioPinValue.High);
-                    break;
-            }
-
+            _controller.Write(in1, PinValue.Low);
+            _controller.Write(in2, PinValue.High);
+            _controller.Write(in3, PinValue.Low);
+            _controller.Write(in4, PinValue.High);
         }
         /// <summary>
         /// 后退
@@ -69,49 +39,87 @@ namespace WebIoT.Peripherals.L298N
         /// <param name="sd">速度</param>
         public void Down()
         {
-            in1.Write(GpioPinValue.High);
-            in2.Write(GpioPinValue.Low);
-            in3.Write(GpioPinValue.High);
-            in4.Write(GpioPinValue.Low);
+            _controller.Write(in1, PinValue.High);
+            _controller.Write(in2, PinValue.Low);
+            _controller.Write(in3, PinValue.High);
+            _controller.Write(in4, PinValue.Low);
         }
         public void Right()
         {
-            in1.Write(GpioPinValue.Low);
-            in2.Write(GpioPinValue.High);
-            in3.Write(GpioPinValue.Low);
-            in4.Write(GpioPinValue.Low);
+            _controller.Write(in1, PinValue.Low);
+            _controller.Write(in2, PinValue.High);
+            _controller.Write(in3, PinValue.Low);
+            _controller.Write(in4, PinValue.Low);
         }
         public void Left()
         {
-            in1.Write(GpioPinValue.Low);
-            in2.Write(GpioPinValue.Low);
-            in3.Write(GpioPinValue.Low);
-            in4.Write(GpioPinValue.High);
+            _controller.Write(in1, PinValue.Low);
+            _controller.Write(in2, PinValue.Low);
+            _controller.Write(in3, PinValue.Low);
+            _controller.Write(in4, PinValue.High);
         }
-        /// <summary>
-        /// 停止
-        /// </summary>
+        public void Pause()
+        {
+            _controller.Write(in1, PinValue.Low);
+            _controller.Write(in2, PinValue.Low);
+            _controller.Write(in3, PinValue.Low);
+            _controller.Write(in4, PinValue.Low);
+        }
+
+        public void Start()
+        {
+            if (!_controller.IsPinOpen(in1))
+            {
+                _controller.OpenPin(in1, PinMode.Output);
+            }
+            if (!_controller.IsPinOpen(in2))
+            {
+                _controller.OpenPin(in2, PinMode.Output);
+            }
+            if (!_controller.IsPinOpen(in3))
+            {
+                _controller.OpenPin(in3, PinMode.Output);
+            }
+            if (!_controller.IsPinOpen(in4))
+            {
+                _controller.OpenPin(in4, PinMode.Output);
+            }
+        }
         public void Stop()
         {
-            in1.Write(GpioPinValue.Low);
-            in2.Write(GpioPinValue.Low);
-            in3.Write(GpioPinValue.Low);
-            in4.Write(GpioPinValue.Low);
+            if (_controller.IsPinOpen(in1))
+            {
+                _controller.ClosePin(in1);
+            }
+            if (_controller.IsPinOpen(in2))
+            {
+                _controller.ClosePin(in2);
+            }
+            if (_controller.IsPinOpen(in3))
+            {
+                _controller.ClosePin(in3);
+            }
+            if (_controller.IsPinOpen(in4))
+            {
+                _controller.ClosePin(in4);
+            }
         }
-        public void Dispose() => Stop();
-        public void Dispose(bool disposing)
+
+        protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
                 if (disposing)
                 {
-                    in1 = null;
-                    in2 = null;
-                    in3 = null;
-                    in4 = null;
+                    _controller.Dispose();
                 }
                 disposedValue = true;
             }
+        }
+        public void Dispose()
+        {
+            Stop();
+            Dispose(true);
         }
     }
 }

@@ -139,7 +139,7 @@
     margin-top: auto;
     margin-right: auto;
     margin-left: auto;
-    margin-bottom: auto;
+    margin-bottom: 10px;
     padding: 0;
     /*width: 800px;*/
 }
@@ -185,4 +185,8 @@
 
 .Switch input:disabled + label {
     opacity: 0.5
+}
+
+.CarClick {
+    background-color: rebeccapurple;
 }
