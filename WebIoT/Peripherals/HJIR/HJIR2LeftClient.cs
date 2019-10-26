@@ -12,7 +12,7 @@ namespace WebIoT.Peripherals.HJIR
     /// </summary>
     public class HJIR2LeftClient : IDisposable
     {
-        private readonly int inPin=7;
+        private readonly int inPin = 7;
         private bool disposedValue;
         private Thread readWorker;
         private readonly GpioController controller = new GpioController();
@@ -35,7 +35,7 @@ namespace WebIoT.Peripherals.HJIR
             if (!controller.IsPinOpen(inPin))
             {
                 controller.OpenPin(inPin, PinMode.Input);
-            }         
+            }
             IsRunning = true;
             if (readWorker == null)
             {
@@ -53,7 +53,8 @@ namespace WebIoT.Peripherals.HJIR
             {
                 controller.ClosePin(inPin);
             }
-            IsRunning = false;            
+            readWorker = null;
+            IsRunning = false;
         }
         private void PerformContinuousReads(object obj)
         {

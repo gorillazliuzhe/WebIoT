@@ -48,13 +48,13 @@ namespace WebIoT.Peripherals
             if (readWorker == null)
             {
                 readWorker = new Thread(PerformContinuousReads);              
-            }
+            }            
             readWorker.Start();
         }
 
         public void Stop()
         {
-            IsRunning = false;
+           
             if (controller.IsPinOpen(TriggerPin))
             {
                 controller.ClosePin(TriggerPin);
@@ -62,7 +62,9 @@ namespace WebIoT.Peripherals
             if (controller.IsPinOpen(EchoPin))
             {
                 controller.ClosePin(EchoPin);
-            }                    
+            }
+            readWorker = null;
+            IsRunning = false;
         }
 
 
