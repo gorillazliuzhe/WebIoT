@@ -60,7 +60,9 @@
     height: 60%;
     background: #fafafa;
 }
-
+.control-inner-btn .fa {
+    transform: rotate(-45deg) translateX(7px);
+}
 .control-top {
     top: -8%;
     left: 27%;
@@ -133,7 +135,9 @@
     border-radius: 0 0 100% 0;
 }
 
-
+.control-bottom .fa {
+    transform: rotate(-45deg) translateX(-7px);
+}
 
 .Switch {
     margin-top: auto;
