@@ -7,24 +7,12 @@ using System.Threading.Tasks;
 
 namespace WebIoT.Peripherals.HJIR
 {
-    /// <summary>
-    /// 红外避障模块 8 7 
-    /// </summary>
-    public class HJIR2Client : IDisposable
+    public class HJR2RightClient
     {
-        private readonly int inPin;
+        private readonly int inPin=8;
         private bool disposedValue;
         private Thread readWorker;
         private readonly GpioController controller = new GpioController();
-        /// <summary>
-        /// 红外避障模块
-        /// </summary>
-        /// <param name="outPin">连接CE* 低电平有效的芯片端口</param>
-        public HJIR2Client(int pinnum = 8)
-        {
-            inPin = pinnum;
-            readWorker = new Thread(PerformContinuousReads);
-        }
 
         /// <summary>
         /// 当传感器有数据时候发生
@@ -43,13 +31,21 @@ namespace WebIoT.Peripherals.HJIR
         {
             controller.OpenPin(inPin, PinMode.Input);
             IsRunning = true;
+            if (readWorker == null)
+            {
+                readWorker = new Thread(PerformContinuousReads);
+            }
             readWorker.Start();
         }
 
         /// <summary>
         /// 停止传感器读取
         /// </summary>
-        public void Stop() => IsRunning = false;
+        public void Stop()
+        {
+            controller.ClosePin(inPin);
+            IsRunning = false;
+        }
         private void PerformContinuousReads(object obj)
         {
             while (IsRunning)

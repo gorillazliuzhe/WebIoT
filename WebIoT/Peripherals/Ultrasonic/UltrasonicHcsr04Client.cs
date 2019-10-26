@@ -17,10 +17,6 @@ namespace WebIoT.Peripherals
         private Thread readWorker;
         private Swan.Diagnostics.HighResolutionTimer measurementTimer;
         private readonly GpioController controller = new GpioController();
-        public UltrasonicHcsr04Client()
-        {
-            readWorker = new Thread(PerformContinuousReads);
-        }
 
         /// <summary>
         /// 当来自传感器的数据可用时发生.
@@ -39,14 +35,24 @@ namespace WebIoT.Peripherals
         /// <returns></returns>
         public void Start()
         {
+
             controller.OpenPin(TriggerPin, PinMode.Output);
             controller.OpenPin(EchoPin, PinMode.Input);
             measurementTimer = new Swan.Diagnostics.HighResolutionTimer();
             IsRunning = true;
+            if (readWorker == null)
+            {
+                readWorker = new Thread(PerformContinuousReads);              
+            }
             readWorker.Start();
         }
 
-        public void Stop() => IsRunning = false;
+        public void Stop()
+        {
+            IsRunning = false;
+            controller.ClosePin(TriggerPin);
+            controller.ClosePin(EchoPin);
+        }
 
 
         private void PerformContinuousReads(object state)
@@ -118,7 +124,7 @@ namespace WebIoT.Peripherals
                 {
                     throw new TimeoutException();
                 }
-            } while (controller.Read(pin) == status);            
+            } while (controller.Read(pin) == status);
         }
     }
 }

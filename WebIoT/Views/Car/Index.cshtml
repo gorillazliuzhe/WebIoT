@@ -7,6 +7,24 @@
 <div class="text-center">
     <h5 class="display-4">控制面板</h5>
 </div>
+<ul class="Switch">
+    <li>
+        <input type="checkbox" name="Storage" id="csb" onclick="KZCSB(this)" />
+        超声波
+        <label for="csb"><em></em></label>
+    </li>
+    <li>
+        <input type="checkbox" name="Storage2" id="bz" onclick="KZBZ(this)" />
+        红外避障
+        <label for="bz"><em></em></label>
+    </li>
+    <li>
+        <input type="checkbox" name="Storage2" id="yk" onclick="KZYK(this)" />
+        红外遥控
+        <label for="yk"><em></em></label>
+    </li>
+</ul>
+
 
 <div class="control-wrapper">
     <div class="control-btn control-top">
@@ -33,16 +51,63 @@
 </div>
 
 <div class="text-center">
-    <h5 class="display-4">模块反馈数据</h5>
-    <p id="csb">32.78CM</p>
+    <h5>超声波数据</h5>
+    <p id="csbdata" style="color:Red">32.78CM</p>
 </div>
+
+<div class="text-center">
+    <h5>红外避障数据</h5>
+    <p id="bzdata" style="color:Red"></p>
+</div>
+
 @section Scripts{
     <script src="~/js/signalr.js"></script>
     <script>
-        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub?groupName=3603631297").build();
+        // 控制超声波
+        function KZCSB(th) {
+            if ($(th).is(':checked')) {
+                $.get("/Hcsr04/Hcsr04On", function (data) {
+                    console.log(data);
+                });
+            } else {
+                $.get("/Hcsr04/Hcsr04Off", function (data) {
+                    console.log(data);
+                });
+            }
+        }
+        // 控制红外避障
+        function KZBZ(th) {
+            if ($(th).is(':checked')) {
+                $.get("/HJIR2/HJIR2On", function (data) {
+                    console.log(data);
+                });
+            } else {
+                $.get("/HJIR2/HJIR2Off", function (data) {
+                    console.log(data);
+                });
+            }
+        }
 
-        connection.on("ReceiveMessage", function (msg) {
-            $("#csb").text(msg);
+
+
+
+
+
+
+        // signalR 接受传感器数据
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub?groupName=lz").build();
+
+        connection.on("ReceiveMessage", function (type, msg) {
+            switch (type) {
+                case "1":
+                    $("#csbdata").text(msg);
+                    break;
+                case "2":
+                    $("#bzdata").text(msg);
+                    break;
+                default:
+                    break;
+            }
         });
 
         connection.start().then(function () { }).catch(function (err) {

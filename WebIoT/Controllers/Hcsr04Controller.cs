@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Unosquare.RaspberryIO.Peripherals;
 using WebIoT.Hubs;
 using WebIoT.Peripherals;
 
@@ -13,7 +9,7 @@ namespace WebIoT.Controllers
     // http://192.168.1.88/Hcsr04/Hcsr04Off
     public class Hcsr04Controller : Controller
     {
-        private readonly UltrasonicHcsr04Client _hcsr04;
+        private readonly UltrasonicHcsr04Client _hcsr04;       
         private readonly IHubContext<ChatHub> _chatHub;
         public Hcsr04Controller(UltrasonicHcsr04Client hcsr04, IHubContext<ChatHub> chatHub)
         {
@@ -26,15 +22,15 @@ namespace WebIoT.Controllers
             {
                 if (!e.IsValid)
                 {
-                    await _chatHub.Clients.Group("3603631297").SendAsync("ReceiveMessage", "声波没有返回,被折射掉了.");
+                    await _chatHub.Clients.Group("lz").SendAsync("ReceiveMessage","1", "声波没有返回,被折射掉了.");
                 }
                 else if (e.HasObstacles)
                 {
-                    Console.WriteLine($"距离:{e.Distance:N2}cm");
+                    await _chatHub.Clients.Group("lz").SendAsync("ReceiveMessage", "1", $"距离:{e.Distance:N2}cm.");
                 }
                 else
                 {
-                    Console.WriteLine("未检测到障碍物.");
+                    await _chatHub.Clients.Group("lz").SendAsync("ReceiveMessage", "1", "未检测到障碍物.");
                 }
             };
             _hcsr04.Start();
