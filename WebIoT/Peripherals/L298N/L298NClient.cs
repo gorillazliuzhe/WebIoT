@@ -10,7 +10,7 @@ namespace WebIoT.Peripherals.L298N
     {
         private const int in1 = 16;
         private const int in2 = 20;
-        private const int in3 = 21;
+        private const int in3 = 21;        
         private const int in4 = 26;
         private readonly GpioController _controller = new GpioController();
         private bool disposedValue;
@@ -28,6 +28,7 @@ namespace WebIoT.Peripherals.L298N
         /// <param name="sd">速度</param>
         public void Up()
         {
+            Pause();
             _controller.Write(in1, PinValue.Low);
             _controller.Write(in2, PinValue.High);
             _controller.Write(in3, PinValue.Low);
@@ -39,6 +40,7 @@ namespace WebIoT.Peripherals.L298N
         /// <param name="sd">速度</param>
         public void Down()
         {
+            Pause();
             _controller.Write(in1, PinValue.High);
             _controller.Write(in2, PinValue.Low);
             _controller.Write(in3, PinValue.High);
@@ -46,6 +48,7 @@ namespace WebIoT.Peripherals.L298N
         }
         public void Right()
         {
+            Pause();
             _controller.Write(in1, PinValue.Low);
             _controller.Write(in2, PinValue.High);
             _controller.Write(in3, PinValue.Low);
@@ -53,6 +56,7 @@ namespace WebIoT.Peripherals.L298N
         }
         public void Left()
         {
+            Pause();
             _controller.Write(in1, PinValue.Low);
             _controller.Write(in2, PinValue.Low);
             _controller.Write(in3, PinValue.Low);

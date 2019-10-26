@@ -76,6 +76,7 @@
                 });
             } else {
                 $.get("/Hcsr04/Hcsr04Off", function (data) {
+                    $("#csbdata").empty();
                     console.log(data);
                 });
             }
@@ -88,6 +89,7 @@
                 });
             } else {
                 $.get("/HJIR2/HJIR2Off", function (data) {
+                     $("#bzdata").empty();
                     console.log(data);
                 });
             }
@@ -116,17 +118,17 @@
                             console.log(data);
                         });
                         break;
-                     case "down":
+                    case "down":
                         $.get("/L298N/Down", function (data) {
                             console.log(data);
                         });
                         break;
-                     case "left":
+                    case "left":
                         $.get("/L298N/Left", function (data) {
                             console.log(data);
                         });
                         break;
-                     case "right":
+                    case "right":
                         $.get("/L298N/Right", function (data) {
                             console.log(data);
                         });
@@ -141,7 +143,7 @@
                 $(th).addClass('CarClick');
             }
         }
-      
+
         // signalR 接受传感器数据
         var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub?groupName=lz").build();
 
