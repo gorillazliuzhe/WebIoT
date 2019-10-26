@@ -38,7 +38,10 @@ namespace WebIoT.Peripherals.HJIR
             {
                 readWorker = new Thread(PerformContinuousReads);
             }
-            readWorker.Start();
+            if (!readWorker.IsAlive)
+            {
+                readWorker.Start();
+            }
         }
 
         /// <summary>
@@ -84,7 +87,7 @@ namespace WebIoT.Peripherals.HJIR
             {
                 if (disposing)
                 {
-                    readWorker.Abort();
+                    readWorker = null;
                     controller.Dispose();
                 }
                 disposedValue = true;

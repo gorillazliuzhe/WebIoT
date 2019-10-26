@@ -91,6 +91,7 @@ namespace WebIoT.Peripherals.L298N
         }
         public void Stop()
         {
+            Pause();
             if (_controller.IsPinOpen(in1))
             {
                 _controller.ClosePin(in1);

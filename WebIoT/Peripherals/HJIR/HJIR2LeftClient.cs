@@ -41,7 +41,10 @@ namespace WebIoT.Peripherals.HJIR
             {
                 readWorker = new Thread(PerformContinuousReads);
             }
-            readWorker.Start();
+            if (!readWorker.IsAlive)
+            {
+                readWorker.Start();
+            }
         }
 
         /// <summary>

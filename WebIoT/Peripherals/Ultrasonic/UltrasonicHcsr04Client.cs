@@ -48,8 +48,11 @@ namespace WebIoT.Peripherals
             if (readWorker == null)
             {
                 readWorker = new Thread(PerformContinuousReads);              
-            }            
-            readWorker.Start();
+            }
+            if (!readWorker.IsAlive)
+            {
+                readWorker.Start();
+            }          
         }
 
         public void Stop()

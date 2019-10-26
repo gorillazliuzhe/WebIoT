@@ -11,6 +11,7 @@ namespace WebIoT.Controllers
 {
     public class HJIR2Controller : Controller
     {
+        public static string isbz = "stop";
         private readonly HJR2RightClient _right;
         private readonly HJIR2LeftClient _left;
         private readonly IHubContext<ChatHub> _chatHub;
@@ -20,30 +21,34 @@ namespace WebIoT.Controllers
             _left = left;
             _chatHub = chatHub;
         }
-        public IActionResult HJIR2On()
+        public async Task<IActionResult> HJIR2On()
         {
             _right.OnDataAvailable += async (s, e) =>
             {
                 if (e.HasObstacles)
                 {
-                    await _chatHub.Clients.Group("lz").SendAsync("ReceiveMessage", "2", "右侧红外避障发现障碍物");
+                    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "2", "右侧红外避障发现障碍物");
                 }
             };
             _left.OnDataAvailable += async (s, e) =>
             {
                 if (e.HasObstacles)
                 {
-                    await _chatHub.Clients.Group("lz").SendAsync("ReceiveMessage", "2", "左侧红外避障发现障碍物");
+                    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "2", "左侧红外避障发现障碍物");
                 }
             };
             _left.Start();
             _right.Start();
+            isbz = "start";
+            await _chatHub.Clients.All.SendAsync("ReceiveMessage", "60", "红外避障打开通知");
             return Content("红外避障打开");
         }
-        public IActionResult HJIR2Off()
+        public async Task<IActionResult> HJIR2Off()
         {
             _right.Stop();
             _left.Stop();
+            isbz = "stop";
+            await _chatHub.Clients.All.SendAsync("ReceiveMessage", "61", "红外避障关闭通知");
             return Content("红外避障关闭");
         }
         // http://192.168.1.88/HJIR2/HJIR2RightOn

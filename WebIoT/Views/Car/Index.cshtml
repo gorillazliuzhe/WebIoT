@@ -19,9 +19,9 @@
         <label for="bz"><em></em></label>
     </li>
     <li>
-        <input type="checkbox" name="Storage2" id="yk" onclick="KZWIFIYK(this)" checked="checked" />
+        <input type="checkbox" name="Storage2" id="wf" onclick="KZWIFIYK(this)" checked="checked" />
         WiFi遥控
-        <label for="yk"><em></em></label>
+        <label for="wf"><em></em></label>
     </li>
     <li>
         <input type="checkbox" name="Storage2" id="yk" onclick="KZYK(this)" />
@@ -32,23 +32,23 @@
 
 
 <div class="control-wrapper">
-    <div class="control-btn control-top" onclick="carmove(this,'up')">
+    <div class="control-btn control-top" id="up" onclick="carmove(this,'up')">
         <i class="fa fa-chevron-up">↑</i>
         <div class="control-inner-btn control-inner"></div>
     </div>
-    <div class="control-btn control-left" onclick="carmove(this,'left')">
+    <div class="control-btn control-left" id="left" onclick="carmove(this,'left')">
         <i class="fa fa-chevron-left">←</i>
         <div class="control-inner-btn control-inner"></div>
     </div>
-    <div class="control-btn control-bottom" onclick="carmove(this,'down')">
+    <div class="control-btn control-bottom" id="down" onclick="carmove(this,'down')">
         <i class="fa fa-chevron-down"></i>
         <div class="control-inner-btn control-inner"></div>
     </div>
-    <div class="control-btn control-right" onclick="carmove(this,'right')">
+    <div class="control-btn control-right" id="right" onclick="carmove(this,'right')">
         <i class="fa fa-chevron-right">→</i>
         <div class="control-inner-btn control-inner"></div>
     </div>
-    <div class="control-round" onclick="carmove(this,'pause')">
+    <div class="control-round" id="pause" onclick="carmove(this,'pause')">
         <div class="control-round-inner">
             <i class="fa fa-pause-circle">P</i>
         </div>
@@ -68,15 +68,64 @@
 @section Scripts{
     <script src="~/js/signalr.js"></script>
     <script>
+        var iscsb = '@ViewBag.IsCSB';
+        var isbz = '@ViewBag.IsBZ';
+        var iswf = '@ViewBag.IsWF';
+        var isup = '@ViewBag.IsUP';
+        var isdown = '@ViewBag.IsDown';
+        var isleft = '@ViewBag.IsLeft';
+        var isright = '@ViewBag.IsRight';
+        var ispause = '@ViewBag.IsPause';
+        $(document).ready(function () {
+            if (iscsb=="start") {
+               $("#csb").prop("checked",true);
+            } else {
+               $("#csb").prop("checked", false);
+            }
+            if (isbz=="start") {
+               $("#bz").prop("checked",true);
+            } else {
+               $("#bz").prop("checked", false);
+            }
+            if (iswf == "start") {
+               $("#wf").prop("checked",true);
+            } else {
+               $("#wf").prop("checked", false);
+            }
+
+            if (isup == "start") {
+                $("#up").siblings('div').removeClass('CarClick');
+                $("#up").addClass('CarClick');
+            }
+            if (isdown == "start") {
+                $("#down").siblings('div').removeClass('CarClick');
+                $("#down").addClass('CarClick');
+            }
+            if (isleft == "start") {
+                $("#left").siblings('div').removeClass('CarClick');
+                $("#left").addClass('CarClick');
+            }
+            if (isright == "start") {
+                $("#right").siblings('div').removeClass('CarClick');
+                $("#right").addClass('CarClick');
+            }
+            if (ispause == "start") {
+                $("#pause").siblings('div').removeClass('CarClick');
+                $("#pause").addClass('CarClick');
+            }
+        });
+
         // 控制超声波
         function KZCSB(th) {
             if ($(th).is(':checked')) {
                 $.get("/Hcsr04/Hcsr04On", function (data) {
+                    iscsb = 'start';
                     console.log(data);
                 });
             } else {
                 $.get("/Hcsr04/Hcsr04Off", function (data) {
                     $("#csbdata").empty();
+                    iscsb = "stop";
                     console.log(data);
                 });
             }
@@ -85,33 +134,34 @@
         function KZBZ(th) {
             if ($(th).is(':checked')) {
                 $.get("/HJIR2/HJIR2On", function (data) {
+                    isbz = "start";
                     console.log(data);
                 });
             } else {
                 $.get("/HJIR2/HJIR2Off", function (data) {
-                     $("#bzdata").empty();
+                    $("#bzdata").empty();
+                    isbz = "stop";
                     console.log(data);
                 });
             }
         }
         // wifi遥控
-        var isstop = false;
         function KZWIFIYK(th) {
             if ($(th).is(':checked')) {
                 $.get("/L298N/Start", function (data) {
+                    iswf = "start";
                     console.log(data);
-                    isstop = false;
                 });
             } else {
                 $.get("/L298N/Stop", function (data) {
+                    iswf = "stop";
                     console.log(data);
-                    isstop = true;
                 });
             }
         }
         // 小车移动
         function carmove(th, type) {
-            if (!isstop) {
+            if (iswf=="start") {
                 switch (type) {
                     case "up":
                         $.get("/L298N/Up", function (data) {
@@ -145,7 +195,7 @@
         }
 
         // signalR 接受传感器数据
-        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub?groupName=lz").build();
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
         connection.on("ReceiveMessage", function (type, msg) {
             switch (type) {
@@ -154,6 +204,52 @@
                     break;
                 case "2":
                     $("#bzdata").text(msg);
+                    break;
+                case "50":
+                    $("#csb").prop("checked", true);
+                    iscsb = "start";
+                    break;
+                case "51":
+                    $("#csb").prop("checked", false);
+                    $("#csbdata").empty();
+                    iscsb = "stop";
+                    break;
+                case "60":
+                    $("#bz").prop("checked", true);
+                    isbz = "start";
+                    break;
+                case "61":
+                    $("#bz").prop("checked", false);
+                    $("#bzdata").empty();
+                    isbz = "stop";
+                    break;
+                case "40":
+                    $("#wf").prop("checked", true);
+                    iswf = "start";
+                    break;
+                case "41":
+                    $("#wf").prop("checked", false);
+                    iswf = "stop";
+                    break;
+                case "42":
+                    $("#up").siblings('div').removeClass('CarClick');
+                    $("#up").addClass('CarClick');
+                    break;
+                case "43":
+                    $("#down").siblings('div').removeClass('CarClick');
+                    $("#down").addClass('CarClick');
+                    break;
+                 case "44":
+                    $("#left").siblings('div').removeClass('CarClick');
+                    $("#left").addClass('CarClick');
+                    break;
+                case "45":
+                    $("#right").siblings('div').removeClass('CarClick');
+                    $("#right").addClass('CarClick');
+                    break;
+                 case "46":
+                    $("#pause").siblings('div').removeClass('CarClick');
+                    $("#pause").addClass('CarClick');
                     break;
                 default:
                     break;

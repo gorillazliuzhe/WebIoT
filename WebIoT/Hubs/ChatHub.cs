@@ -14,10 +14,10 @@ namespace WebIoT.Hubs
         public override async Task OnConnectedAsync()
         {
             // 1.连接后加入组
-            string groupName = Context.GetHttpContext().Request.Query["groupName"];
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+            //string groupName = Context.GetHttpContext().Request.Query["groupName"];
+            //await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             //await Clients.Group("123").SendAsync("ReceiveMessage", $"{Context.ConnectionId} ",$" {groupName}");
-            //await Clients.All.SendAsync("ReceiveMessage", $"{Context.ConnectionId} joined");
+            await Clients.All.SendAsync("ReceiveMessage","99", $"{Context.ConnectionId} joined");
         }
 
         /// <summary>
