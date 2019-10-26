@@ -120,6 +120,8 @@ namespace WebIoT.Peripherals.Infrared
             _isDisposed = true;
             if (alsoManaged)
             {
+                CLearPulseAvailableeEvent();
+                CLearDataAvailableEvent();
                 // Dispose of Managed objects
                 _idleChecker.Dispose();
             }
@@ -241,6 +243,32 @@ namespace WebIoT.Peripherals.Infrared
                 DataAvailable?.Invoke(this, a as InfraredSensorDataEventArgs);
             },
             args);
+        }
+   
+        public void CLearDataAvailableEvent()
+        {
+            if (DataAvailable == null) return;
+            Delegate[] dels = DataAvailable.GetInvocationList();
+            foreach (Delegate del in dels)
+            {
+                object delObj = del.GetType().GetProperty("Method").GetValue(del, null);
+                string funcName = (string)delObj.GetType().GetProperty("Name").GetValue(delObj, null);////方法名
+                Console.WriteLine(funcName);
+                DataAvailable -= del as EventHandler<InfraredSensorDataEventArgs>;
+            }
+        }
+
+        public void CLearPulseAvailableeEvent()
+        {
+            if (PulseAvailable == null) return;
+            Delegate[] dels = PulseAvailable.GetInvocationList();
+            foreach (Delegate del in dels)
+            {
+                object delObj = del.GetType().GetProperty("Method").GetValue(del, null);
+                string funcName = (string)delObj.GetType().GetProperty("Name").GetValue(delObj, null);////方法名
+                Console.WriteLine(funcName);
+                PulseAvailable -= del as EventHandler<InfraredSensorPulseEventArgs>;
+            }
         }
     }
 }

@@ -95,7 +95,10 @@
             } else {
                $("#wf").prop("checked", false);
             }
-
+            if (ishw == "start") {
+                $("#hw").prop("checked", true);
+                $("#hw").attr("disabled", "disabled");
+            }
             if (isup == "start") {
                 $("#up").siblings('div').removeClass('CarClick');
                 $("#up").addClass('CarClick');
@@ -167,13 +170,14 @@
             if ($(th).is(':checked')) {
                 $.get("/HX1838/Start", function (data) {
                     ishw = "start";
+                    $(th).attr("disabled", "disabled");
                     console.log(data);
                 });
             } else {
-                $.get("/HX1838/Stop", function (data) {
-                    ishw = "stop";
-                    console.log(data);
-                });
+                //$.get("/HX1838/Stop", function (data) {
+                //    ishw = "stop";
+                //    console.log(data);
+                //});
             }
         }
 
@@ -284,6 +288,7 @@
                     break;
                 case "70":
                     $("#hw").prop("checked", true);
+                    $("#hw").attr("disabled", "disabled");
                     ishw = "start";
                     break;
                 case "71":

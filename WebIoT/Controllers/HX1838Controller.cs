@@ -59,17 +59,21 @@ namespace WebIoT.Controllers
 
                     Console.WriteLine("红外线");
                 };
-            }           
+            }
             ishw = "start";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "70", "红外遥控器开启");
             return Content("红外遥控器开启");
         }
+        /// <summary>
+        /// 重启后有问题,暂时不可用关闭,要关闭要重启站点
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Stop()
         {
-            ishw = "stop";
+            ishw = "stop";           
             sensor.Dispose();
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "71", "红外遥控器关闭");
             return Content("红外遥控器关闭");
-        }
+        }    
     }
 }
