@@ -4,9 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Unosquare.RaspberryIO;
+using Unosquare.RaspberryIO.Abstractions;
 using WebIoT.Hubs;
 using WebIoT.Peripherals;
 using WebIoT.Peripherals.HJIR;
+using WebIoT.Peripherals.Infrared;
 using WebIoT.Peripherals.L298N;
 
 namespace WebIoT
@@ -24,12 +26,12 @@ namespace WebIoT
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //services.AddSingleton<UltrasonicHcsr04>(_ => new UltrasonicHcsr04(Pi.Gpio[BcmPin.Gpio23], Pi.Gpio[BcmPin.Gpio24]));
-            services.AddSingleton<LedClient>();         
+            services.AddSingleton<LedClient>();
             services.AddSingleton<L298NClient>();
             services.AddSingleton<HJIR2LeftClient>();
             services.AddSingleton<HJR2RightClient>();
             services.AddSingleton<UltrasonicHcsr04Client>();
+            //services.AddSingleton<InfraredSensor>(_ => new InfraredSensor(Pi.Gpio[BcmPin.Gpio25], true));
             services.AddSignalR();
             services.AddControllersWithViews();
         }
@@ -56,7 +58,7 @@ namespace WebIoT
             catch
             {
 
-            }           
+            }
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

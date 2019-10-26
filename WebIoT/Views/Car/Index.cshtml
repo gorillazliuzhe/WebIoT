@@ -24,9 +24,9 @@
         <label for="wf"><em></em></label>
     </li>
     <li>
-        <input type="checkbox" name="Storage2" id="yk" onclick="KZYK(this)" />
+        <input type="checkbox" name="Storage2" id="hw" onclick="KZHWYK(this)" />
         红外遥控
-        <label for="yk"><em></em></label>
+        <label for="hw"><em></em></label>
     </li>
 </ul>
 
@@ -73,6 +73,7 @@
         var iscsb = '@ViewBag.IsCSB';
         var isbz = '@ViewBag.IsBZ';
         var iswf = '@ViewBag.IsWF';
+        var ishw = '@ViewBag.IsHW';
         var isup = '@ViewBag.IsUP';
         var isdown = '@ViewBag.IsDown';
         var isleft = '@ViewBag.IsLeft';
@@ -161,6 +162,21 @@
                 });
             }
         }
+        // 红外遥控
+        function KZHWYK(th) {
+            if ($(th).is(':checked')) {
+                $.get("/HX1838/Start", function (data) {
+                    ishw = "start";
+                    console.log(data);
+                });
+            } else {
+                $.get("/HX1838/Stop", function (data) {
+                    ishw = "stop";
+                    console.log(data);
+                });
+            }
+        }
+
         // 小车移动
         function carmove(th, type) {
             if (iswf=="start") {
@@ -215,6 +231,9 @@
                 case "2":
                     $("#bzdata").text(msg);
                     break;
+                case "3":
+                    console.log(msg);
+                    break;
                 case "50":
                     $("#csb").prop("checked", true);
                     iscsb = "start";
@@ -251,7 +270,7 @@
                     $("#down").siblings('div').removeClass('CarClick');
                     $("#down").addClass('CarClick');
                     break;
-                 case "44":
+                case "44":
                     $("#left").siblings('div').removeClass('CarClick');
                     $("#left").addClass('CarClick');
                     break;
@@ -259,9 +278,17 @@
                     $("#right").siblings('div').removeClass('CarClick');
                     $("#right").addClass('CarClick');
                     break;
-                 case "46":
+                case "46":
                     $("#pause").siblings('div').removeClass('CarClick');
                     $("#pause").addClass('CarClick');
+                    break;
+                case "70":
+                    $("#hw").prop("checked", true);
+                    ishw = "start";
+                    break;
+                case "71":
+                    $("#hw").prop("checked", false);
+                    ishw = "stop";
                     break;
                 default:
                     break;
