@@ -194,6 +194,14 @@
             }
         }
 
+        function setstop() {
+            isup = "stop";
+            isdown = "stop";
+            isleft = "stop";
+            isright = "stop";
+            ispause = "stop";
+        }
+
         // signalR 接受传感器数据
         var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
@@ -231,6 +239,7 @@
                     $("#wf").prop("checked", false);
                     $("#up").siblings('div').removeClass('CarClick');
                     iswf = "stop";
+                    setstop();
                     break;
                 case "42":
                     $("#up").siblings('div').removeClass('CarClick');

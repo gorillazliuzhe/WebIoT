@@ -73,11 +73,14 @@ namespace WebIoT.Controllers
         }
         public async Task<IActionResult> Stop()
         {
-            _l298n.Stop(); iswifi = "stop";
+            _l298n.Stop(); iswifi = "stop"; InitFX();
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "41", "停止WiFi控制.");
             return Content("停止WiFi控制");
         }
 
+        /// <summary>
+        /// 初始化方向
+        /// </summary>
         private void InitFX()
         {
             isup = "stop";
