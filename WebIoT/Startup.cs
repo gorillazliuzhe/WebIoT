@@ -49,7 +49,14 @@ namespace WebIoT
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            Pi.Init<Unosquare.WiringPi.BootstrapWiringPi>();
+            try
+            {
+                Pi.Init<Unosquare.WiringPi.BootstrapWiringPi>();
+            }
+            catch
+            {
+
+            }           
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
