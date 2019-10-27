@@ -7,6 +7,7 @@ using Unosquare.RaspberryIO;
 using Unosquare.RaspberryIO.Abstractions;
 using WebIoT.Hubs;
 using WebIoT.Peripherals;
+using WebIoT.Peripherals.AM2302;
 using WebIoT.Peripherals.HJIR;
 using WebIoT.Peripherals.Infrared;
 using WebIoT.Peripherals.L298N;
@@ -28,9 +29,10 @@ namespace WebIoT
 
             services.AddSingleton<LedClient>();
             services.AddSingleton<L298NClient>();
+            services.AddSingleton<AM2302Client>();
             services.AddSingleton<HJIR2LeftClient>();
             services.AddSingleton<HJR2RightClient>();
-            services.AddSingleton<UltrasonicHcsr04Client>();
+            services.AddSingleton<UltrasonicHcsr04Client>();            
             //services.AddSingleton<InfraredSensor>(_ => new InfraredSensor(Pi.Gpio[BcmPin.Gpio25], true));
             services.AddSignalR();
             services.AddControllersWithViews();

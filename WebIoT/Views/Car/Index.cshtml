@@ -6,6 +6,7 @@
 }
 <div class="text-center">
     <h5 class="display-4">控制面板</h5>
+    <p>温度:<span id="wd">35°C</span> 湿度:<span id="sd">50%</span></p>
 </div>
 <ul class="Switch">
     <li>
@@ -236,6 +237,19 @@
                     $("#bzdata").text(msg);
                     break;
                 case "3":
+                    console.log(msg);
+                    break;
+                case "4":
+                    var data = msg.split('#');
+                    if (data.length == 2) {
+                        $("#wd").text(data[0]);
+                        $("#sd").text(data[1]);
+                    }
+                    break;
+                case "30":
+                    console.log(msg);
+                    break;
+                case "31":
                     console.log(msg);
                     break;
                 case "50":
