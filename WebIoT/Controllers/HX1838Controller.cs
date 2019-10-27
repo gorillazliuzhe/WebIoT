@@ -38,8 +38,6 @@ namespace WebIoT.Controllers
                         var decdata= BitConverter.ToString(necData);
                         Console.WriteLine($"NEC Data: {decdata.Replace("-", " "),12}    Pulses: {e.Pulses.Length,4}    Duration(us): {e.TrainDurationUsecs,6}    Reason: {e.FlushReason}");
 
-                        await _chatHub.Clients.All.SendAsync("ReceiveMessage", "3", $"NEC Data: {BitConverter.ToString(necData).Replace("-", " "),12}");
-
                         #region 遥控器控制小车
                         switch (decdata)
                         {
@@ -74,7 +72,7 @@ namespace WebIoT.Controllers
                                 await _chatHub.Clients.All.SendAsync("ReceiveMessage", "46", "暂停.");
                                 break;
                         }
-
+                        await _chatHub.Clients.All.SendAsync("ReceiveMessage", "3", $"NEC Data: {BitConverter.ToString(necData).Replace("-", " "),12}");
                         #endregion
                         if (InfraredSensor.NecDecoder.IsRepeatCode(e.Pulses))
                             return;                     
