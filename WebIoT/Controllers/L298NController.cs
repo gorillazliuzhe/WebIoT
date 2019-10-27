@@ -81,7 +81,7 @@ namespace WebIoT.Controllers
         /// <summary>
         /// 初始化方向
         /// </summary>
-        private void InitFX()
+        public static void InitFX()
         {
             isup = "stop";
             isdown = "stop";

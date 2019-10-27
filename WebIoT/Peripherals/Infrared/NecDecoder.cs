@@ -119,6 +119,7 @@ namespace WebIoT.Peripherals.Infrared
 
             /// <summary>
             /// Determines whether the set of pulses represent a repeat code.
+            /// 确定这组脉冲是否代表重复代码
             /// </summary>
             /// <param name="pulses">The pulses.</param>
             /// <returns>

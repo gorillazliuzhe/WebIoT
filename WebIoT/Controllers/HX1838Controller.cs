@@ -35,37 +35,73 @@ namespace WebIoT.Controllers
                     var necData = InfraredSensor.NecDecoder.DecodePulses(e.Pulses);
                     if (necData != null)
                     {
-                        Console.WriteLine($"NEC Data: {BitConverter.ToString(necData).Replace("-", " "),12}    Pulses: {e.Pulses.Length,4}    Duration(us): {e.TrainDurationUsecs,6}    Reason: {e.FlushReason}");
+                        var decdata= BitConverter.ToString(necData);
+                        Console.WriteLine($"NEC Data: {decdata.Replace("-", " "),12}    Pulses: {e.Pulses.Length,4}    Duration(us): {e.TrainDurationUsecs,6}    Reason: {e.FlushReason}");
 
                         await _chatHub.Clients.All.SendAsync("ReceiveMessage", "3", $"NEC Data: {BitConverter.ToString(necData).Replace("-", " "),12}");
 
+                        #region 遥控器控制小车
+                        switch (decdata)
+                        {
+                            case "DD-22-0B-F4":
+                                _l298n.Up();
+                                L298NController.InitFX();
+                                L298NController.isup = "start";
+                                await _chatHub.Clients.All.SendAsync("ReceiveMessage", "42", "前进.");
+                                break;
+                            case "DD-22-0D-F2":
+                                _l298n.Down();
+                                L298NController.InitFX();
+                                L298NController.isdown = "start";
+                                await _chatHub.Clients.All.SendAsync("ReceiveMessage", "43", "后退.");
+                                break;
+                            case "DD-22-0E-F1":
+                                _l298n.Left();
+                                L298NController.InitFX();
+                                L298NController.isleft = "start";
+                                await _chatHub.Clients.All.SendAsync("ReceiveMessage", "44", "左转.");
+                                break;
+                            case "DD-22-0C-F3":
+                                _l298n.Right();
+                                L298NController.InitFX();
+                                L298NController.isright = "start";
+                                await _chatHub.Clients.All.SendAsync("ReceiveMessage", "45", "右转.");
+                                break;
+                            case "DD-22-0A-F5":
+                                _l298n.Pause();
+                                L298NController.InitFX();
+                                L298NController.ispause = "start";
+                                await _chatHub.Clients.All.SendAsync("ReceiveMessage", "46", "暂停.");
+                                break;
+                        }
+
+                        #endregion
                         if (InfraredSensor.NecDecoder.IsRepeatCode(e.Pulses))
-                            return;
+                            return;                     
                     }
                     else
                     {
                         if (e.Pulses.Length >= 4)
                         {
                             var debugData = InfraredSensor.DebugPulses(e.Pulses);
-                            Console.WriteLine($"RX    Length: {e.Pulses.Length,5}; Duration: {e.TrainDurationUsecs,7}; Reason: {e.FlushReason}");
-                            Console.WriteLine($"Debug data: {debugData}");
+                            //Console.WriteLine($"RX    Length: {e.Pulses.Length,5}; Duration: {e.TrainDurationUsecs,7}; Reason: {e.FlushReason}");
+                            //Console.WriteLine($"Debug data: {debugData}");
                             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "3", $"Debug data: {debugData}");
                         }
                         else
                         {
-                            Console.WriteLine($"RX (Garbage): {e.Pulses.Length,5}; Duration: {e.TrainDurationUsecs,7}; Reason: {e.FlushReason}");
+                            //Console.WriteLine($"RX (Garbage): {e.Pulses.Length,5}; Duration: {e.TrainDurationUsecs,7}; Reason: {e.FlushReason}");
                         }
                     }
-
-                    Console.WriteLine("红外线");
                 };
             }
             ishw = "start";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "70", "红外遥控器开启");
             return Content("红外遥控器开启");
         }
+        
         /// <summary>
-        /// 重启后有问题,暂时不可用关闭,要关闭要重启站点
+        /// Stop后有问题,暂时不可用关闭,要关闭要重启站点
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> Stop()
