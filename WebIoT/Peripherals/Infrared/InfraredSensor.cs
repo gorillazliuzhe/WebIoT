@@ -120,8 +120,8 @@ namespace WebIoT.Peripherals.Infrared
             _isDisposed = true;
             if (alsoManaged)
             {
-                CLearPulseAvailableeEvent();
-                CLearDataAvailableEvent();
+                //CLearPulseAvailableeEvent();
+                //CLearDataAvailableEvent();
                 // Dispose of Managed objects
                 _idleChecker.Dispose();
             }
