@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using WebIoT.Hubs;
 using WebIoT.Peripherals;
+using WebIoT.Playground.Ultrasonic;
 
 namespace WebIoT.Controllers
 {
@@ -10,9 +11,10 @@ namespace WebIoT.Controllers
     public class Hcsr04Controller : Controller
     {
         public static string iscsb = "stop";
-        private readonly UltrasonicHcsr04Client _hcsr04;
+        //private readonly UltrasonicHcsr04Client _hcsr04;
+        private readonly IHcsr04Client _hcsr04;
         private readonly IHubContext<ChatHub> _chatHub;
-        public Hcsr04Controller(UltrasonicHcsr04Client hcsr04, IHubContext<ChatHub> chatHub)
+        public Hcsr04Controller(IHcsr04Client hcsr04, IHubContext<ChatHub> chatHub)
         {
             _hcsr04 = hcsr04;
             _chatHub = chatHub;

@@ -5,7 +5,7 @@ namespace WebIoT.Peripherals
 {
     public class LedClient : IDisposable
     {
-        private const int LedPin = 17;
+        private const int LedPin = 27;
         private readonly GpioController _controller = new GpioController();
         private bool disposedValue = false;
         private readonly object _locker = new object();

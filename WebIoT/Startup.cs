@@ -5,10 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Unosquare.RaspberryIO;
 using WebIoT.Hubs;
+using WebIoT.Models;
 using WebIoT.Peripherals;
 using WebIoT.Peripherals.AM2302;
 using WebIoT.Peripherals.HJIR;
 using WebIoT.Peripherals.L298N;
+using WebIoT.Playground.Ultrasonic;
 
 namespace WebIoT
 {
@@ -24,13 +26,15 @@ namespace WebIoT
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.Configure<SiteConfig>(Configuration.GetSection("SiteConfig"));
             services.AddSingleton<LedClient>();
             services.AddSingleton<L298NClient>();
             services.AddSingleton<AM2302Client>();
             services.AddSingleton<HJIR2LeftClient>();
             services.AddSingleton<HJR2RightClient>();
-            services.AddSingleton<UltrasonicHcsr04Client>();            
+            services.AddSingleton<IHcsr04Client, Hcsr04Client>();
+            services.AddSingleton<UltrasonicHcsr04Client>();   
+            
             //services.AddSingleton<InfraredSensor>(_ => new InfraredSensor(Pi.Gpio[BcmPin.Gpio25], true));
             services.AddSignalR();
             services.AddControllersWithViews();

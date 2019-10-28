@@ -59,6 +59,7 @@ namespace WebIoT.Peripherals.HJIR
             readWorker = null;
             IsRunning = false;
         }
+        
         private void PerformContinuousReads(object obj)
         {
             while (IsRunning)
