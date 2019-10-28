@@ -1,10 +1,5 @@
-﻿using Iot.Device.DHTxx;
-using Iot.Device.Hcsr04;
-using Iot.Units;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Threading.Tasks;
 using WebIoT.Hubs;
 using WebIoT.Peripherals.AM2302;
 
