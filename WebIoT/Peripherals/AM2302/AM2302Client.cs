@@ -20,11 +20,7 @@ namespace WebIoT.Peripherals.AM2302
         private int _period;
 
 
-        /// <summary>
-        /// 初始化新实例.
-        /// </summary>
-        /// <param name="dataPin">数据引脚。必须是Pi的P1接头连接器上的仅GPIO引脚.</param>
-        /// <exception cref="ArgumentException">dataPin无效时.</exception>
+      
         public AM2302Client()
         {            
             _readTimer = new Timer(PerformContinuousReads, null, Timeout.Infinite, Timeout.Infinite);

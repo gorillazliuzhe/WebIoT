@@ -4,12 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Unosquare.RaspberryIO;
-using Unosquare.RaspberryIO.Abstractions;
 using WebIoT.Hubs;
 using WebIoT.Peripherals;
 using WebIoT.Peripherals.AM2302;
 using WebIoT.Peripherals.HJIR;
-using WebIoT.Peripherals.Infrared;
 using WebIoT.Peripherals.L298N;
 
 namespace WebIoT
