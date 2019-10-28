@@ -6,11 +6,9 @@ using Microsoft.Extensions.Hosting;
 using Unosquare.RaspberryIO;
 using WebIoT.Hubs;
 using WebIoT.Models;
-using WebIoT.Peripherals;
-using WebIoT.Peripherals.AM2302;
-using WebIoT.Peripherals.HJIR;
-using WebIoT.Peripherals.L298N;
 using WebIoT.Playground.HJIR;
+using WebIoT.Playground.L298N;
+using WebIoT.Playground.Led;
 using WebIoT.Playground.Ultrasonic;
 
 namespace WebIoT
@@ -28,16 +26,18 @@ namespace WebIoT
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<SiteConfig>(Configuration.GetSection("SiteConfig"));
-            services.AddSingleton<LedClient>();
-            services.AddSingleton<L298NClient>();
-            services.AddSingleton<AM2302Client>();
-            services.AddSingleton<HJIR2LeftClient>();
-            services.AddSingleton<HJR2RightClient>();
-            services.AddSingleton<UltrasonicHcsr04Client>();
-            
+            //services.AddSingleton<Peripherals.LedClient>();
+            //services.AddSingleton<L298NClient>();
+            //services.AddSingleton<AM2302Client>();
+            //services.AddSingleton<HJIR2LeftClient>();
+            //services.AddSingleton<HJR2RightClient>();
+            //services.AddSingleton<UltrasonicHcsr04Client>();
+
+            services.AddSingleton<ILedClient, LedClient>();
+            services.AddSingleton<IHJR2Client, HJR2Client>();
+            services.AddSingleton<IL298NClient, L298NClient>();
             services.AddSingleton<IHcsr04Client, Hcsr04Client>();
-            services.AddSingleton<IHJR2Client, HJR2Client>();   
-            
+                         
             //services.AddSingleton<InfraredSensor>(_ => new InfraredSensor(Pi.Gpio[BcmPin.Gpio25], true));
             services.AddSignalR();
             services.AddControllersWithViews();

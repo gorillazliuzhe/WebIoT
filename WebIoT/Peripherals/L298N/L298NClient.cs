@@ -3,9 +3,7 @@ using System.Device.Gpio;
 
 namespace WebIoT.Peripherals.L298N
 {
-    /// <summary>
-    /// 原生支持没找到PWM 如需使用PWM请使用第三方库,这里由于PWM左右速度不一致就不加 变速功能
-    /// </summary>
+   
     public class L298NClient
     {
         private const int in1 = 16;
