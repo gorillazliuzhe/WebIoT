@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Device.Gpio;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebIoT.Models;
@@ -11,14 +9,14 @@ using WebIoT.Tools;
 
 namespace WebIoT.Playground.Ultrasonic
 {
-    public class Hcsr04Client : IHcsr04Client, IDisposable
+    public class Hcsr04Client : IHcsr04Client,IDisposable
     {
         private readonly int _echo;
         private readonly int _trigger;
         private int _lastMeasurment = 0;
         private GpioController _controller;
-        public const int NoObstacleDistance = -1; // 当未检测到障碍物时报告此值.
-        private Stopwatch _timer = new Stopwatch();       
+        public const int NoObstacleDistance = -1; // 当未检测到障碍物时默认值.
+        private readonly Stopwatch _timer = new Stopwatch();       
         public event EventHandler<Hcsr04ReadEventArgs> OnDataAvailable;
 
         public bool IsRunning { get; set; }
@@ -43,7 +41,14 @@ namespace WebIoT.Playground.Ultrasonic
             }              
             Task.Run(() => PerformContinuousReads());
         }
-
+        public void Stop()
+        {
+            IsRunning = false;
+            if (_controller.IsPinOpen(_trigger))
+                _controller.ClosePin(_trigger);
+            if (_controller.IsPinOpen(_echo))
+                _controller.ClosePin(_echo);
+        }
         private void PerformContinuousReads()
         {
             while (IsRunning)
@@ -56,14 +61,7 @@ namespace WebIoT.Playground.Ultrasonic
             }
         }
 
-        public void Stop()
-        {
-            IsRunning = false;
-            if (_controller.IsPinOpen(_trigger))
-                _controller.ClosePin(_trigger);
-            if (_controller.IsPinOpen(_echo))
-                _controller.ClosePin(_echo);           
-        }
+       
 
         /// <summary>
         /// Gets the current distance in cm.

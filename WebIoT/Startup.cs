@@ -10,6 +10,7 @@ using WebIoT.Peripherals;
 using WebIoT.Peripherals.AM2302;
 using WebIoT.Peripherals.HJIR;
 using WebIoT.Peripherals.L298N;
+using WebIoT.Playground.HJIR;
 using WebIoT.Playground.Ultrasonic;
 
 namespace WebIoT
@@ -32,8 +33,10 @@ namespace WebIoT
             services.AddSingleton<AM2302Client>();
             services.AddSingleton<HJIR2LeftClient>();
             services.AddSingleton<HJR2RightClient>();
+            services.AddSingleton<UltrasonicHcsr04Client>();
+            
             services.AddSingleton<IHcsr04Client, Hcsr04Client>();
-            services.AddSingleton<UltrasonicHcsr04Client>();   
+            services.AddSingleton<IHJR2Client, HJR2Client>();   
             
             //services.AddSingleton<InfraredSensor>(_ => new InfraredSensor(Pi.Gpio[BcmPin.Gpio25], true));
             services.AddSignalR();

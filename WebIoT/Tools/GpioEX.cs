@@ -10,16 +10,23 @@ namespace WebIoT.Tools
     {
         public static bool WaitForValue(GpioController gpio, int pinNumber, PinValue value, int timeOutMillisecond = 50)
         {
-            var outstime = DateTime.Now.Millisecond;
-            do
+            try
             {
-                var outseime = DateTime.Now.Millisecond;
-                if ((outseime - outstime) > timeOutMillisecond)
+                var outstime = DateTime.Now.Millisecond;
+                do
                 {
-                    return false;
-                }
-            } while (gpio.Read(pinNumber) == value);
-            return true;
+                    var outseime = DateTime.Now.Millisecond;
+                    if ((outseime - outstime) > timeOutMillisecond)
+                    {
+                        return false;
+                    }
+                } while (gpio.Read(pinNumber) == value);
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }          
         }
     }
 }

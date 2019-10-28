@@ -4,95 +4,71 @@ using System;
 using System.Threading.Tasks;
 using WebIoT.Hubs;
 using WebIoT.Peripherals.HJIR;
+using WebIoT.Playground.HJIR;
 
 namespace WebIoT.Controllers
 {
     public class HJIR2Controller : Controller
     {
         public static string isbz = "stop";
-        private readonly HJR2RightClient _right;
-        private readonly HJIR2LeftClient _left;
+        //private readonly HJR2RightClient _right;
+        //private readonly HJIR2LeftClient _left;
+        private readonly IHJR2Client _hjr2;
         private readonly IHubContext<ChatHub> _chatHub;
-        public HJIR2Controller(IHubContext<ChatHub> chatHub, HJR2RightClient right, HJIR2LeftClient left)
+        public HJIR2Controller(IHubContext<ChatHub> chatHub, IHJR2Client hjr2)
         {
-            _right = right;
-            _left = left;
+            _hjr2 = hjr2;
             _chatHub = chatHub;
         }
         public async Task<IActionResult> HJIR2On()
         {
-            _right.OnDataAvailable += async (s, e) =>
+            _hjr2.OnDataAvailable += async (s, e) =>
             {
-                if (e.HasObstacles)
+                bool l = false; bool r = false;
+                foreach (var item in e)
                 {
-                    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "2", "右侧红外避障发现障碍物");
+                    if (item.IsValid && item.HasObstacles)
+                    {
+                        switch (item.type)
+                        {
+                            case 1:
+                                l = true;
+                                break;
+                            case 2:
+                                r = true;
+                                break;
+                        }
+                    }
                 }
-            };
-            _left.OnDataAvailable += async (s, e) =>
-            {
-                if (e.HasObstacles)
+                if (l && r)
                 {
-                    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "2", "左侧红外避障发现障碍物");
+                    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "2", "左右红外避障发现障碍物");
                 }
+                else if (l)
+                {
+                    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "2", "左红外避障发现障碍物");
+                }
+                else if (r)
+                {
+                    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "2", "右红外避障发现障碍物");
+                }
+                else
+                {
+                    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "2", "none");
+                }
+
             };
-            _left.Start();
-            _right.Start();
+            _hjr2.Start();
             isbz = "start";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "60", "红外避障打开通知");
             return Content("红外避障打开");
         }
         public async Task<IActionResult> HJIR2Off()
         {
-            _right.Stop();
-            _left.Stop();
+            _hjr2.Stop();
             isbz = "stop";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "61", "红外避障关闭通知");
             return Content("红外避障关闭");
-        }
-        // http://192.168.1.88/HJIR2/HJIR2RightOn
-        public IActionResult HJIR2RightOn()
-        {
-            _right.OnDataAvailable += (s, e) =>
-            {
-                if (e.HasObstacles)
-                {
-                    Console.WriteLine("右侧红外避障发现障碍物");
-                }
-                else
-                {
-                    //Console.WriteLine("当前前方20cm,右侧红外避障没有发现障碍物");
-                }
-            };
-            _right.Start();
-            return Content("右侧红外避障打开");
-        }
-        public IActionResult HJIR2RightOff()
-        {
-            _right.Stop();
-            return Content("右侧红外避障关闭");
-        }
-
-        // http://192.168.1.88/HJIR2/HJIR2LeftOn
-        public IActionResult HJIR2LeftOn()
-        {
-            _left.OnDataAvailable += (s, e) =>
-            {
-                if (e.HasObstacles)
-                {
-                    Console.WriteLine("左侧红外避障发现障碍物");
-                }
-                else
-                {
-                    //Console.WriteLine("当前前方20cm,左侧红外避障没有发现障碍物");
-                }
-            };
-            _left.Start();
-            return Content("左侧红外避障打开");
-        }
-        public IActionResult HJIR2LeftOff()
-        {
-            _left.Stop();
-            return Content("左侧红外避障关闭");
         }
     }
 }
