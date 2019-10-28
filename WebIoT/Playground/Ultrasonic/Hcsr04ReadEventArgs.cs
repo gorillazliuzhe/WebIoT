@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace WebIoT.Playground.Ultrasonic
+namespace WebIoT.Playground
 {
     public class Hcsr04ReadEventArgs : EventArgs
     {

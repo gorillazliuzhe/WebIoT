@@ -1,4 +1,4 @@
-﻿namespace WebIoT.Playground.HJIR
+﻿namespace WebIoT.Playground
 {
     public class HJIR2ReadEventArgs
     {

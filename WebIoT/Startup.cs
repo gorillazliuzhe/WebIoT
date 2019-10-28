@@ -6,10 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Unosquare.RaspberryIO;
 using WebIoT.Hubs;
 using WebIoT.Models;
-using WebIoT.Playground.HJIR;
-using WebIoT.Playground.L298N;
-using WebIoT.Playground.Led;
-using WebIoT.Playground.Ultrasonic;
+using WebIoT.Playground;
 
 namespace WebIoT
 {

@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 using WebIoT.Models;
 using WebIoT.Tools;
 
-namespace WebIoT.Playground.Ultrasonic
+namespace WebIoT.Playground
 {
-    public class Hcsr04Client : IHcsr04Client,IDisposable
+    public class Hcsr04Client : IHcsr04Client, IDisposable
     {
         private readonly int _echo;
         private readonly int _trigger;
         private int _lastMeasurment = 0;
+        private bool disposedValue;
         private GpioController _controller;
         public const int NoObstacleDistance = -1; // 当未检测到障碍物时默认值.
-        private readonly Stopwatch _timer = new Stopwatch();       
+        private readonly Stopwatch _timer = new Stopwatch();
         public event EventHandler<Hcsr04ReadEventArgs> OnDataAvailable;
 
         public bool IsRunning { get; set; }
@@ -38,7 +39,7 @@ namespace WebIoT.Playground.Ultrasonic
             {
                 _controller.OpenPin(_trigger, PinMode.Output);
                 _controller.Write(_trigger, PinValue.Low);
-            }              
+            }
             Task.Run(() => PerformContinuousReads());
         }
         public void Stop()
@@ -59,13 +60,8 @@ namespace WebIoT.Playground.Ultrasonic
                 OnDataAvailable?.Invoke(this, sensorData);
                 Thread.Sleep(200);
             }
+            Dispose(true);
         }
-
-       
-
-        /// <summary>
-        /// Gets the current distance in cm.
-        /// </summary>
         private Hcsr04ReadEventArgs RetrieveSensorData()
         {
             try
@@ -102,23 +98,26 @@ namespace WebIoT.Playground.Ultrasonic
                 var distance = elapsed.TotalMilliseconds / 2.0 * 34.3;
 
                 return new Hcsr04ReadEventArgs(distance);
-                
+
             }
             catch
             {
                 return Hcsr04ReadEventArgs.CreateInvalidReading();
             }
-           
+
         }
 
-        /// <inheritdoc/>
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            if (_controller != null)
+            if (!disposedValue)
             {
-                _controller.Dispose();
-                _controller = null;
+                if (disposing)
+                {
+                    _controller.Dispose();
+                }
+                disposedValue = true;
             }
         }
+        public void Dispose() => Stop();
     }
 }

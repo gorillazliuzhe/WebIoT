@@ -1,16 +1,14 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Device.Gpio;
-using System.Linq;
-using System.Threading.Tasks;
 using WebIoT.Models;
 
-namespace WebIoT.Playground.Led
+namespace WebIoT.Playground
 {
     public class LedClient : ILedClient, IDisposable
     {
         private readonly int _ledPin;
+        private bool disposedValue;
         private GpioController _controller;
         private readonly object _locker = new object();
         public LedClient(IOptions<SiteConfig> option, PinNumberingScheme pinNumberingScheme = PinNumberingScheme.Logical)
@@ -33,13 +31,20 @@ namespace WebIoT.Playground.Led
                 _controller.Write(_ledPin, PinValue.Low);
             }
         }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _controller.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
         public void Dispose()
         {
-            if (_controller != null)
-            {
-                _controller.Dispose();
-                _controller = null;
-            }
+            Dispose(true);
         }
     }
 }

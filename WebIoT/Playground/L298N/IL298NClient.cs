@@ -1,4 +1,4 @@
-﻿namespace WebIoT.Playground.L298N
+﻿namespace WebIoT.Playground
 {
     public interface IL298NClient
     {

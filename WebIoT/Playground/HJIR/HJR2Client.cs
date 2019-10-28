@@ -5,14 +5,14 @@ using System.Device.Gpio;
 using System.Threading;
 using System.Threading.Tasks;
 using WebIoT.Models;
-using WebIoT.Tools;
 
-namespace WebIoT.Playground.HJIR
+namespace WebIoT.Playground
 {
     public class HJR2Client : IHJR2Client, IDisposable
     {
         private readonly int _left;
         private readonly int _right;
+        private bool disposedValue;
         private GpioController _controller;
         public event EventHandler<List<HJIR2ReadEventArgs>> OnDataAvailable;
         public bool IsRunning { get; set; }
@@ -49,6 +49,7 @@ namespace WebIoT.Playground.HJIR
                 OnDataAvailable?.Invoke(this, sensorData);
                 Thread.Sleep(200);
             }
+            Dispose(true);
         }
         private List<HJIR2ReadEventArgs> RetrieveSensorData()
         {
@@ -72,14 +73,17 @@ namespace WebIoT.Playground.HJIR
             }
         }
 
-        /// <inheritdoc/>
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            if (_controller != null)
+            if (!disposedValue)
             {
-                _controller.Dispose();
-                _controller = null;
+                if (disposing)
+                {
+                    _controller.Dispose();
+                }
+                disposedValue = true;
             }
         }
+        public void Dispose() => Stop();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebIoT.Playground.HJIR
+namespace WebIoT.Playground
 {
     public interface IHJR2Client
     {

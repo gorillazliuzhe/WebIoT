@@ -1,4 +1,4 @@
-﻿namespace WebIoT.Playground.Led
+﻿namespace WebIoT.Playground
 {
     public interface ILedClient
     {

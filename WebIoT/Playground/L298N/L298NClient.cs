@@ -1,12 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Device.Gpio;
-using System.Linq;
-using System.Threading.Tasks;
 using WebIoT.Models;
 
-namespace WebIoT.Playground.L298N
+namespace WebIoT.Playground
 {
     public class L298NClient : IL298NClient, IDisposable
     {
@@ -14,6 +11,7 @@ namespace WebIoT.Playground.L298N
         private readonly int _in2;
         private readonly int _in3;
         private readonly int _in4;
+        private bool disposedValue;
         private GpioController _controller;
         private readonly object _locker = new object();
 
@@ -95,13 +93,20 @@ namespace WebIoT.Playground.L298N
             if (_controller.IsPinOpen(_in4))
                 _controller.ClosePin(_in4);
         }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _controller.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
         public void Dispose()
         {
-            if (_controller != null)
-            {
-                _controller.Dispose();
-                _controller = null;
-            }
+            Dispose(true);
         }
     }
 }

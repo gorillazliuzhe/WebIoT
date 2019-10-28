@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebIoT.Playground.Ultrasonic
+namespace WebIoT.Playground
 {
     public interface IHcsr04Client
     {

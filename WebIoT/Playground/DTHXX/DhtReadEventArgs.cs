@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebIoT.Peripherals.AM2302
+namespace WebIoT.Playground
 {
     /// <summary>
     /// 已读取的传感器数据.
