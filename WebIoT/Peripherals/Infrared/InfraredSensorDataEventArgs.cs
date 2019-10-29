@@ -6,7 +6,7 @@
     public sealed partial class InfraredSensor
     {
         /// <summary>
-        /// Represents event arguments for when a receiver buffer is ready to be decoded.
+        /// 表示已经准备好解码接收器缓冲区的事件参数。
         /// </summary>
         /// <seealso cref="EventArgs" />
         public class InfraredSensorDataEventArgs : EventArgs

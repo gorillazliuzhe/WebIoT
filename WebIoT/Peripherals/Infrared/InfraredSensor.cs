@@ -214,6 +214,7 @@ namespace WebIoT.Peripherals.Infrared
 
         /// <summary>
         /// Called when a single infrared sensor pulse becomes available.
+        /// 当单个红外传感器脉冲可用时调用
         /// </summary>
         /// <param name="pulse">The pulse.</param>
         private void OnInfraredSensorPulseAvailable(InfraredPulse pulse)
@@ -230,6 +231,7 @@ namespace WebIoT.Peripherals.Infrared
 
         /// <summary>
         /// Called when an infrared sensor raw data buffer becomes available.
+        /// 当红外传感器原始数据缓冲区可用时调用。
         /// </summary>
         /// <param name="pulses">The pulses.</param>
         /// <param name="state">The state.</param>
