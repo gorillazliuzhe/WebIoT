@@ -46,36 +46,34 @@ namespace WebIoT.Controllers
             //};
             //_am2302.Start();
 
-            //Task.Run(() =>
-            //{
-            //    var sensor = DhtSensor.Create(Unosquare.RaspberryIO.Peripherals.DhtType.Dht22, Pi.Gpio[_dthpin]);
-
-            //    sensor.OnDataAvailable += async (s, e) =>
-            //    {
-            //        if (!e.IsValid)
-            //            return;
-            //        await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{e.Temperature:0.00}°C # {e.HumidityPercentage:00.0}%");
-            //    };
-
-            //    sensor.Start();
-            //});
-
-            Task.Run(async () =>
+            Task.Run(() =>
             {
-                using (Iot.Device.DHTxx.Dht22 dht = new Iot.Device.DHTxx.Dht22(_dthpin))
+                var sensor = DhtSensor.Create(Unosquare.RaspberryIO.Peripherals.DhtType.Dht22, Pi.Gpio[_dthpin]);
+                sensor.OnDataAvailable += async (s, e) =>
                 {
-                    while (true)
-                    {
-                        Temperature temperature = dht.Temperature;
-                        double humidity = dht.Humidity;
-                        if (!double.IsNaN(temperature.Celsius) && !double.IsNaN(humidity))
-                        {
-                            await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{temperature.Celsius:0.00}°C # {humidity:00.0}%");
-                        }
-                        Thread.Sleep(2000);
-                    }
-                }
+                    if (!e.IsValid)
+                        return;
+                    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{e.Temperature:0.00}°C # {e.HumidityPercentage:00.0}%");
+                };
+                sensor.Start();
             });
+
+            //Task.Run(async () =>
+            //{
+            //    using (Iot.Device.DHTxx.Dht22 dht = new Iot.Device.DHTxx.Dht22(_dthpin))
+            //    {
+            //        while (true)
+            //        {
+            //            Temperature temperature = dht.Temperature;
+            //            double humidity = dht.Humidity;
+            //            if (!double.IsNaN(temperature.Celsius) && !double.IsNaN(humidity))
+            //            {
+            //                await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{temperature.Celsius:0.00}°C # {humidity:00.0}%");
+            //            }
+            //            Thread.Sleep(2000);
+            //        }
+            //    }
+            //});
             #endregion           
 
             return View();
