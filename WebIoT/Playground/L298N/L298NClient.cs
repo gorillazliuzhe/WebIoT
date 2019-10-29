@@ -31,10 +31,13 @@ namespace WebIoT.Playground
         /// <param name="sd">速度</param>
         public void Up()
         {
-            _controller.Write(_in1, PinValue.Low);
-            _controller.Write(_in2, PinValue.High);
-            _controller.Write(_in3, PinValue.Low);
-            _controller.Write(_in4, PinValue.High);
+            lock (_locker)
+            {
+                _controller.Write(_in1, PinValue.Low);
+                _controller.Write(_in2, PinValue.High);
+                _controller.Write(_in3, PinValue.Low);
+                _controller.Write(_in4, PinValue.High);
+            }
         }
         /// <summary>
         /// 后退
@@ -42,56 +45,74 @@ namespace WebIoT.Playground
         /// <param name="sd">速度</param>
         public void Down()
         {
-            _controller.Write(_in1, PinValue.High);
-            _controller.Write(_in2, PinValue.Low);
-            _controller.Write(_in3, PinValue.High);
-            _controller.Write(_in4, PinValue.Low);
+            lock (_locker)
+            {
+                _controller.Write(_in1, PinValue.High);
+                _controller.Write(_in2, PinValue.Low);
+                _controller.Write(_in3, PinValue.High);
+                _controller.Write(_in4, PinValue.Low);
+            }
         }
         public void Right()
         {
-            _controller.Write(_in1, PinValue.Low);
-            _controller.Write(_in2, PinValue.High);
-            _controller.Write(_in3, PinValue.Low);
-            _controller.Write(_in4, PinValue.Low);
+            lock (_locker)
+            {
+                _controller.Write(_in1, PinValue.Low);
+                _controller.Write(_in2, PinValue.High);
+                _controller.Write(_in3, PinValue.Low);
+                _controller.Write(_in4, PinValue.Low);
+            }
         }
         public void Left()
         {
-            _controller.Write(_in1, PinValue.Low);
-            _controller.Write(_in2, PinValue.Low);
-            _controller.Write(_in3, PinValue.Low);
-            _controller.Write(_in4, PinValue.High);
+            lock (_locker)
+            {
+                _controller.Write(_in1, PinValue.Low);
+                _controller.Write(_in2, PinValue.Low);
+                _controller.Write(_in3, PinValue.Low);
+                _controller.Write(_in4, PinValue.High);
+            }
         }
         public void Pause()
         {
-            _controller.Write(_in1, PinValue.Low);
-            _controller.Write(_in2, PinValue.Low);
-            _controller.Write(_in3, PinValue.Low);
-            _controller.Write(_in4, PinValue.Low);
+            lock (_locker)
+            {
+                _controller.Write(_in1, PinValue.Low);
+                _controller.Write(_in2, PinValue.Low);
+                _controller.Write(_in3, PinValue.Low);
+                _controller.Write(_in4, PinValue.Low);
+            }
         }
 
         public void Start()
         {
-            if (!_controller.IsPinOpen(_in1))
-                _controller.OpenPin(_in1, PinMode.Output);
-            if (!_controller.IsPinOpen(_in2))
-                _controller.OpenPin(_in2, PinMode.Output);
-            if (!_controller.IsPinOpen(_in3))
-                _controller.OpenPin(_in3, PinMode.Output);
-            if (!_controller.IsPinOpen(_in4))
-                _controller.OpenPin(_in4, PinMode.Output);
-            Pause();
+            lock (_locker)
+            {
+                if (!_controller.IsPinOpen(_in1))
+                    _controller.OpenPin(_in1, PinMode.Output);
+                if (!_controller.IsPinOpen(_in2))
+                    _controller.OpenPin(_in2, PinMode.Output);
+                if (!_controller.IsPinOpen(_in3))
+                    _controller.OpenPin(_in3, PinMode.Output);
+                if (!_controller.IsPinOpen(_in4))
+                    _controller.OpenPin(_in4, PinMode.Output);
+                Pause();
+            }
         }
         public void Stop()
         {
-            Pause();
-            if (_controller.IsPinOpen(_in1))
-                _controller.ClosePin(_in1);
-            if (_controller.IsPinOpen(_in2))
-                _controller.ClosePin(_in2);
-            if (_controller.IsPinOpen(_in3))
-                _controller.ClosePin(_in3);
-            if (_controller.IsPinOpen(_in4))
-                _controller.ClosePin(_in4);
+            lock (_locker)
+            {
+                Pause();
+                if (_controller.IsPinOpen(_in1))
+                    _controller.ClosePin(_in1);
+                if (_controller.IsPinOpen(_in2))
+                    _controller.ClosePin(_in2);
+                if (_controller.IsPinOpen(_in3))
+                    _controller.ClosePin(_in3);
+                if (_controller.IsPinOpen(_in4))
+                    _controller.ClosePin(_in4);
+            }
         }
         protected virtual void Dispose(bool disposing)
         {
