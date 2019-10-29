@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Device.Gpio;
+﻿using System.Device.Gpio;
 
 namespace WebIoT.Peripherals.L298N
 {
-   
+
     public class L298NClient
     {
         private const int in1 = 16;

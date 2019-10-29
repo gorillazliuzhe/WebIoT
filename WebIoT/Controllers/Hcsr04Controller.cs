@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using WebIoT.Hubs;
-using WebIoT.Peripherals;
-using WebIoT.Playground.Ultrasonic;
+using WebIoT.Playground;
 
 namespace WebIoT.Controllers
 {

@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using System;
 using System.Threading.Tasks;
 using WebIoT.Hubs;
-using WebIoT.Peripherals.HJIR;
-using WebIoT.Playground.HJIR;
+using WebIoT.Playground;
 
 namespace WebIoT.Controllers
 {

@@ -105,8 +105,7 @@ namespace WebIoT.Playground
             {
                 if (count-- == 0)
                 {
-                    IsLastReadSuccessful = false;
-                    return;
+                    return DhtReadEventArgs.CreateInvalidReading();
                 }
             }
 
@@ -116,8 +115,7 @@ namespace WebIoT.Playground
             {
                 if (count-- == 0)
                 {
-                    IsLastReadSuccessful = false;
-                    return;
+                    return DhtReadEventArgs.CreateInvalidReading();
                 }
             }
 
@@ -130,8 +128,7 @@ namespace WebIoT.Playground
                 {
                     if (count-- == 0)
                     {
-                        IsLastReadSuccessful = false;
-                        return;
+                        return DhtReadEventArgs.CreateInvalidReading();
                     }
                 }
 
@@ -143,8 +140,7 @@ namespace WebIoT.Playground
                 {
                     if (count-- == 0)
                     {
-                        IsLastReadSuccessful = false;
-                        return;
+                        return DhtReadEventArgs.CreateInvalidReading();
                     }
                 }
                 _stopwatch.Stop();
@@ -164,18 +160,15 @@ namespace WebIoT.Playground
                 }
             }
 
-            _lastMeasurement = Environment.TickCount;
-
-            if ((_readBuff[4] == ((_readBuff[0] + _readBuff[1] + _readBuff[2] + _readBuff[3]) & 0xFF)))
-            {
-                IsLastReadSuccessful = (_readBuff[0] != 0) || (_readBuff[2] != 0);
-            }
-            else
-            {
-                IsLastReadSuccessful = false;
-            }
+            // 完成校验
+            return IsDataValid(_readBuff) ? 
+                new DhtReadEventArgs(humidityPercentage: DecodeHumidity(_readBuff),
+                                     temperatureCelsius: DecodeTemperature(_readBuff)) 
+                : DhtReadEventArgs.CreateInvalidReading();
         }
 
+        private static bool IsDataValid(byte[] data) => ((data[0] + data[1] + data[2] + data[3]) & 0xFF) == data[4];
+        
         ///<summary>
         /// 解码温度.
         /// </summary>
