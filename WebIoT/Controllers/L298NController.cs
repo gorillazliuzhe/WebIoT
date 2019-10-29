@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using WebIoT.Hubs;
-using WebIoT.Peripherals.L298N;
+using WebIoT.Playground;
 
 namespace WebIoT.Controllers
 {
@@ -14,9 +14,9 @@ namespace WebIoT.Controllers
         public static string isleft = "stop";
         public static string isright = "stop";
         public static string ispause = "stop";
-        private readonly L298NClient _l298n;
+        private readonly IL298NClient _l298n;
         private readonly IHubContext<ChatHub> _chatHub;
-        public L298NController(L298NClient l298n, IHubContext<ChatHub> chatHub)
+        public L298NController(IL298NClient l298n, IHubContext<ChatHub> chatHub)
         {
             _chatHub = chatHub;
             _l298n = l298n;

@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebIoT.Peripherals;
+using WebIoT.Playground;
 
 namespace WebIoT.Controllers
 {
     // http://192.168.1.88/led/LedOn
     public class LedController : Controller
     {
-        private readonly LedClient _ledClient;
-        public LedController(LedClient ledClient)
+        private readonly ILedClient _ledClient;
+        public LedController(ILedClient ledClient)
         {
             _ledClient = ledClient;
         }
