@@ -33,7 +33,7 @@ namespace WebIoT.Peripherals.Infrared
             /// </summary>
             /// <param name="pulses">The pulses.</param>
             /// <returns>The decoded bytes.</returns>
-            public static byte[]? DecodePulses(InfraredPulse[] pulses)
+            public static byte[] DecodePulses(InfraredPulse[] pulses)
             {
                 // check if we have a repeat code
                 if (IsRepeatCode(pulses))
