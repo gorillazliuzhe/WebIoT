@@ -6,19 +6,18 @@ using Unosquare.RaspberryIO;
 using Unosquare.RaspberryIO.Abstractions;
 using WebIoT.Hubs;
 using WebIoT.Peripherals.Infrared;
-using WebIoT.Peripherals.L298N;
+using WebIoT.Playground;
 
 namespace WebIoT.Controllers
 {
     public class HX1838Controller : Controller
     {
         public static string ishw = "stop";
-        private readonly L298NClient _l298n;
+        private readonly IL298NClient _l298n;
         private static InfraredSensor sensor;
         private readonly IHubContext<ChatHub> _chatHub;
-        public HX1838Controller(L298NClient l298n, IHubContext<ChatHub> chatHub)
+        public HX1838Controller(IL298NClient l298n, IHubContext<ChatHub> chatHub)
         {
-
             _chatHub = chatHub;
             _l298n = l298n;
         }
