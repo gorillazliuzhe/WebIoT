@@ -244,7 +244,7 @@ namespace WebIoT.Peripherals.Infrared
             },
             args);
         }
-   
+
         public void CLearDataAvailableEvent()
         {
             if (DataAvailable == null) return;

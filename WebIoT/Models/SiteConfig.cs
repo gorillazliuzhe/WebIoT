@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebIoT.Models
+﻿namespace WebIoT.Models
 {
     public class SiteConfig
     {
@@ -65,6 +60,6 @@ namespace WebIoT.Models
         /// <summary>
         /// DHT22 默认17
         /// </summary>
-        public int DHT22Pin { get;set;}
+        public int DHT22Pin { get; set; }
     }
 }

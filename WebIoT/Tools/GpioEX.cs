@@ -23,7 +23,7 @@ namespace WebIoT.Tools
             catch (Exception)
             {
                 throw;
-            }          
+            }
         }
     }
 }

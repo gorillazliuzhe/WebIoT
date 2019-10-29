@@ -7,7 +7,7 @@ namespace WebIoT.Peripherals.L298N
     {
         private const int in1 = 16;
         private const int in2 = 20;
-        private const int in3 = 21;        
+        private const int in3 = 21;
         private const int in4 = 26;
         private readonly GpioController _controller = new GpioController();
         private bool disposedValue;

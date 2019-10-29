@@ -29,7 +29,7 @@ namespace WebIoT.Peripherals
         /// </summary>
         public double Distance { get; }
 
-      
+
         internal static UltrasonicReadEventArgs CreateInvalidReading() => new UltrasonicReadEventArgs(false);
     }
 }

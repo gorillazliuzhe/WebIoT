@@ -42,22 +42,22 @@ namespace WebIoT.Peripherals
             if (!controller.IsPinOpen(EchoPin))
             {
                 controller.OpenPin(EchoPin, PinMode.Input);
-            }           
+            }
             measurementTimer = new Swan.Diagnostics.HighResolutionTimer();
             IsRunning = true;
             if (readWorker == null)
             {
-                readWorker = new Thread(PerformContinuousReads);              
+                readWorker = new Thread(PerformContinuousReads);
             }
             if (!readWorker.IsAlive)
             {
                 readWorker.Start();
-            }          
+            }
         }
 
         public void Stop()
         {
-           
+
             if (controller.IsPinOpen(TriggerPin))
             {
                 controller.ClosePin(TriggerPin);

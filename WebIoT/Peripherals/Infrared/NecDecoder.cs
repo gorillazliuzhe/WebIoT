@@ -1,8 +1,8 @@
 namespace WebIoT.Peripherals.Infrared
 {
+    using Swan;
     using System.Collections;
     using System.Linq;
-    using Swan;
 
     public sealed partial class InfraredSensor
     {
@@ -57,7 +57,7 @@ namespace WebIoT.Peripherals.Infrared
                 // Return a null result if we could not find ACG (1)
                 if (startPulseIndex == -1)
                     return null;
-                
+
                 startPulseIndex += 1;
 
                 // Find the first 0 value, 4.5 Millisecond
@@ -76,7 +76,7 @@ namespace WebIoT.Peripherals.Infrared
                 // Return a null result if we could not find the start of the train of pulses
                 if (startPulseIndex == -1)
                     return null;
-                
+
                 startPulseIndex += 1;
 
                 // Verify that the last pulse is a space (1) and and it is a short pulse

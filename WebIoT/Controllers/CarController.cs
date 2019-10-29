@@ -1,7 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Iot.Device.DHTxx;
+using Iot.Units;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Options;
+using System.Threading;
+using System.Threading.Tasks;
 using WebIoT.Hubs;
+using WebIoT.Models;
 using WebIoT.Peripherals.AM2302;
+using WebIoT.Playground;
 
 namespace WebIoT.Controllers
 {
@@ -9,10 +16,12 @@ namespace WebIoT.Controllers
     {
         private readonly AM2302Client _am2302;
         private readonly IHubContext<ChatHub> _chatHub;
-        public CarController(AM2302Client am2302, IHubContext<ChatHub> chatHub)
+        private readonly int _dthpin;
+       public CarController(AM2302Client am2302,IOptions<SiteConfig> option, IHubContext<ChatHub> chatHub)
         {
             _am2302 = am2302;
             _chatHub = chatHub;
+            _dthpin=option.Value.DHT22Pin;
         }
         public IActionResult Index()
         {
@@ -35,7 +44,19 @@ namespace WebIoT.Controllers
             };
             _am2302.Start();
             #endregion
-
+            //Task.Run(() =>
+            //{
+            //    using (Dht22 dht = new Dht22(_dthpin))
+            //    {
+            //        while (true)
+            //        {
+            //            Temperature temperature = dht.Temperature;
+            //            double humidity = dht.Humidity;
+            //            Thread.Sleep(2000);
+            //        }
+                   
+            //    }
+            //});
             return View();
         }
     }

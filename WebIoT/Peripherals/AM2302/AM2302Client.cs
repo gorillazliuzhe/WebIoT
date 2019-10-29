@@ -13,9 +13,9 @@ namespace WebIoT.Peripherals.AM2302
         private readonly IGpioPin _dataPin = Pi.Gpio[BcmPin.Gpio17];
         private readonly Timer _readTimer;
         private bool _disposedValue;
-        private int _period;     
+        private int _period;
         public AM2302Client()
-        {            
+        {
             _readTimer = new Timer(PerformContinuousReads, null, Timeout.Infinite, Timeout.Infinite);
         }
 
@@ -204,7 +204,7 @@ namespace WebIoT.Peripherals.AM2302
             }
         }
 
-        private static bool IsDataValid(byte[] data) =>((data[0] + data[1] + data[2] + data[3]) & 0xff) == data[4];
+        private static bool IsDataValid(byte[] data) => ((data[0] + data[1] + data[2] + data[3]) & 0xff) == data[4];
 
         /// <summary>
         /// 终止读取.

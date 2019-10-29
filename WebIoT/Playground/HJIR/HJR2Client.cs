@@ -55,7 +55,7 @@ namespace WebIoT.Playground
         {
             List<HJIR2ReadEventArgs> list = new List<HJIR2ReadEventArgs>();
             try
-            {                
+            {
                 if (_controller.Read(_left) == PinValue.Low)
                 {
                     list.Add(new HJIR2ReadEventArgs(true) { type = 1, HasObstacles = true });

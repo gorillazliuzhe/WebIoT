@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Device.Gpio;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WebIoT.Peripherals.HJIR
 {
@@ -59,7 +56,7 @@ namespace WebIoT.Peripherals.HJIR
             readWorker = null;
             IsRunning = false;
         }
-        
+
         private void PerformContinuousReads(object obj)
         {
             while (IsRunning)

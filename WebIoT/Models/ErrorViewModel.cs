@@ -1,5 +1,3 @@
-using System;
-
 namespace WebIoT.Models
 {
     public class ErrorViewModel

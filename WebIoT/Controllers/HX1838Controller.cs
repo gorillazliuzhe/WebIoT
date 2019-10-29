@@ -35,7 +35,7 @@ namespace WebIoT.Controllers
                     var necData = InfraredSensor.NecDecoder.DecodePulses(e.Pulses);
                     if (necData != null)
                     {
-                        var decdata= BitConverter.ToString(necData);
+                        var decdata = BitConverter.ToString(necData);
                         Console.WriteLine($"NEC Data: {decdata.Replace("-", " "),12}    Pulses: {e.Pulses.Length,4}    Duration(us): {e.TrainDurationUsecs,6}    Reason: {e.FlushReason}");
 
                         #region 遥控器控制小车
@@ -75,7 +75,7 @@ namespace WebIoT.Controllers
                         await _chatHub.Clients.All.SendAsync("ReceiveMessage", "3", $"NEC Data: {BitConverter.ToString(necData).Replace("-", " "),12}");
                         #endregion
                         if (InfraredSensor.NecDecoder.IsRepeatCode(e.Pulses))
-                            return;                     
+                            return;
                     }
                     else
                     {
@@ -97,17 +97,17 @@ namespace WebIoT.Controllers
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "70", "红外遥控器开启");
             return Content("红外遥控器开启");
         }
-        
+
         /// <summary>
         /// Stop后有问题,暂时不可用关闭,要关闭要重启站点
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> Stop()
         {
-            ishw = "stop";           
+            ishw = "stop";
             sensor.Dispose();
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "71", "红外遥控器关闭");
             return Content("红外遥控器关闭");
-        }    
+        }
     }
 }
