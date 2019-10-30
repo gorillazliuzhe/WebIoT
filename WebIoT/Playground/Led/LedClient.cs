@@ -9,7 +9,7 @@ namespace WebIoT.Playground
     {
         private readonly int _ledPin;
         private bool disposedValue;
-        private GpioController _controller;
+        private readonly GpioController _controller;
         private readonly object _locker = new object();
         public LedClient(IOptions<SiteConfig> option, PinNumberingScheme pinNumberingScheme = PinNumberingScheme.Logical)
         {

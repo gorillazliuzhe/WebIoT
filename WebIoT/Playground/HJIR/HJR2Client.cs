@@ -13,7 +13,8 @@ namespace WebIoT.Playground
         private readonly int _left;
         private readonly int _right;
         private bool disposedValue;
-        private GpioController _controller;
+        private readonly GpioController _controller;
+        private readonly object _locker = new object();
         public event EventHandler<List<HJIR2ReadEventArgs>> OnDataAvailable;
         public bool IsRunning { get; set; }
         public HJR2Client(IOptions<SiteConfig> option, PinNumberingScheme pinNumberingScheme = PinNumberingScheme.Logical)
@@ -24,20 +25,26 @@ namespace WebIoT.Playground
         }
         public void Start()
         {
-            IsRunning = true;
-            if (!_controller.IsPinOpen(_left))
-                _controller.OpenPin(_left, PinMode.Input);
-            if (!_controller.IsPinOpen(_right))
-                _controller.OpenPin(_right, PinMode.Input);
-            Task.Run(() => PerformContinuousReads());
+            lock (_locker)
+            {
+                IsRunning = true;
+                if (!_controller.IsPinOpen(_left))
+                    _controller.OpenPin(_left, PinMode.Input);
+                if (!_controller.IsPinOpen(_right))
+                    _controller.OpenPin(_right, PinMode.Input);
+                Task.Run(() => PerformContinuousReads());
+            }           
         }
         public void Stop()
         {
-            IsRunning = false;
-            if (_controller.IsPinOpen(_left))
-                _controller.ClosePin(_left);
-            if (_controller.IsPinOpen(_right))
-                _controller.ClosePin(_right);
+            lock (_locker)
+            {
+                IsRunning = false;
+                if (_controller.IsPinOpen(_left))
+                    _controller.ClosePin(_left);
+                if (_controller.IsPinOpen(_right))
+                    _controller.ClosePin(_right);
+            }            
         }
         private void PerformContinuousReads()
         {

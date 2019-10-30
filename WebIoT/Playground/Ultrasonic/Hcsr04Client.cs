@@ -15,8 +15,9 @@ namespace WebIoT.Playground
         private readonly int _trigger;
         private int _lastMeasurment = 0;
         private bool disposedValue;
-        private GpioController _controller;
-        public const int NoObstacleDistance = -1; // 当未检测到障碍物时默认值.
+        private readonly GpioController _controller;
+        public const int NoObstacleDistance = -1;
+        private readonly object _locker = new object();
         private readonly Stopwatch _timer = new Stopwatch();
         public event EventHandler<Hcsr04ReadEventArgs> OnDataAvailable;
 
@@ -31,24 +32,30 @@ namespace WebIoT.Playground
 
         public void Start()
         {
-            IsRunning = true;
-            if (!_controller.IsPinOpen(_echo))
-                _controller.OpenPin(_echo, PinMode.Input);
-
-            if (!_controller.IsPinOpen(_trigger))
+            lock (_locker)
             {
-                _controller.OpenPin(_trigger, PinMode.Output);
-                _controller.Write(_trigger, PinValue.Low);
+                IsRunning = true;
+                if (!_controller.IsPinOpen(_echo))
+                    _controller.OpenPin(_echo, PinMode.Input);
+
+                if (!_controller.IsPinOpen(_trigger))
+                {
+                    _controller.OpenPin(_trigger, PinMode.Output);
+                    _controller.Write(_trigger, PinValue.Low);
+                }
+                Task.Run(() => PerformContinuousReads());
             }
-            Task.Run(() => PerformContinuousReads());
         }
         public void Stop()
         {
-            IsRunning = false;
-            if (_controller.IsPinOpen(_trigger))
-                _controller.ClosePin(_trigger);
-            if (_controller.IsPinOpen(_echo))
-                _controller.ClosePin(_echo);
+            lock (_locker)
+            {
+                IsRunning = false;
+                if (_controller.IsPinOpen(_trigger))
+                    _controller.ClosePin(_trigger);
+                if (_controller.IsPinOpen(_echo))
+                    _controller.ClosePin(_echo);
+            }
         }
         private void PerformContinuousReads()
         {
