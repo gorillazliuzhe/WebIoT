@@ -29,33 +29,33 @@ namespace WebIoT.Controllers
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "40", "开启WiFi控制.");
             return Content("开启WiFi控制");
         }
-        public async Task<IActionResult> Up()
+        public async Task<IActionResult> Up(double speed = 0.6)
         {
-            _l298n.Up();           
+            _l298n.Move(1, speed);
             InitFX();
             isup = "start";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "42", "前进.");
             return Content("前进");
         }
-        public async Task<IActionResult> Down()
+        public async Task<IActionResult> Down(double speed = 0.6)
         {
-            _l298n.Down();
+            _l298n.Move(2, speed);
             InitFX();
             isdown = "start";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "43", "后退.");
             return Content("后退");
         }
-        public async Task<IActionResult> Left()
+        public async Task<IActionResult> Left(double speed = 0.6)
         {
-            _l298n.Left();
+            _l298n.Move(3, speed);
             InitFX();
             isleft = "start";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "44", "左转.");
             return Content("左转");
         }
-        public async Task<IActionResult> Right()
+        public async Task<IActionResult> Right(double speed = 0.6)
         {
-            _l298n.Right();
+            _l298n.Move(4, speed);
             InitFX();
             isright = "start";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "45", "右转.");
@@ -63,7 +63,7 @@ namespace WebIoT.Controllers
         }
         public async Task<IActionResult> Pause()
         {
-            _l298n.Pause();
+            _l298n.Move(5, 0);
             InitFX();
             ispause = "start";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "46", "暂停.");

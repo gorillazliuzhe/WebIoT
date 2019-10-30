@@ -10,7 +10,7 @@
         /// <summary>
         /// 软件模拟PWM
         /// </summary>
-        public int SoftPWMPin { get;set;}
+        public int SoftPWMPin { get; set; }
 
         /// <summary>
         /// 超声波控制端 默认23
@@ -43,6 +43,16 @@
         public int L298nIn4Pin { get; set; }
 
         /// <summary>
+        /// ENA
+        /// </summary>
+        public int L298nENAPin { get;set;}
+        
+        /// <summary>
+        /// ENB
+        /// </summary>
+        public int L298nENBPin { get; set; }
+        
+        /// <summary>
         /// PWM1 默认18
         /// </summary>
         public int PWM1Pin { get; set; }
@@ -66,5 +76,10 @@
         /// DHT22 默认17
         /// </summary>
         public int DHT22Pin { get; set; }
+        
+        /// <summary>
+        /// PWM 频率
+        /// </summary>
+        public int Frequency { get; set; }
     }
 }
