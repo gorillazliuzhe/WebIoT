@@ -12,7 +12,6 @@ namespace WebIoT.Playground
     {
         private readonly int _left;
         private readonly int _right;
-        private bool disposedValue;
         private readonly GpioController _controller;
         private readonly object _locker = new object();
         public event EventHandler<List<HJIR2ReadEventArgs>> OnDataAvailable;
@@ -82,13 +81,9 @@ namespace WebIoT.Playground
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (disposing)
             {
-                if (disposing)
-                {
-                    _controller.Dispose();
-                }
-                disposedValue = true;
+                _controller?.Dispose();
             }
         }
         public void Dispose() => Stop();

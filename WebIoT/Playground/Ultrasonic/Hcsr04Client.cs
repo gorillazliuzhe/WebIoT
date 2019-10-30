@@ -14,7 +14,6 @@ namespace WebIoT.Playground
         private readonly int _echo;
         private readonly int _trigger;
         private int _lastMeasurment = 0;
-        private bool disposedValue;
         private readonly GpioController _controller;
         public const int NoObstacleDistance = -1;
         private readonly object _locker = new object();
@@ -116,13 +115,9 @@ namespace WebIoT.Playground
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (disposing)
             {
-                if (disposing)
-                {
-                    _controller.Dispose();
-                }
-                disposedValue = true;
+                _controller?.Dispose();
             }
         }
         public void Dispose() => Stop();

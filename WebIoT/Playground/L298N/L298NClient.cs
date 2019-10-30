@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Iot.Device.DCMotor;
+using Microsoft.Extensions.Options;
 using System;
 using System.Device.Gpio;
 using WebIoT.Models;
@@ -11,8 +12,7 @@ namespace WebIoT.Playground
         private readonly int _in2;
         private readonly int _in3;
         private readonly int _in4;
-        private bool disposedValue;
-        private GpioController _controller;
+        private readonly GpioController _controller;
         private readonly object _locker = new object();
 
         public L298NClient(IOptions<SiteConfig> option, PinNumberingScheme pinNumberingScheme = PinNumberingScheme.Logical)
@@ -116,13 +116,9 @@ namespace WebIoT.Playground
         }
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (disposing)
             {
-                if (disposing)
-                {
-                    _controller.Dispose();
-                }
-                disposedValue = true;
+                _controller?.Dispose();
             }
         }
         public void Dispose()

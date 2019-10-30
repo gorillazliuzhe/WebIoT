@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Iot.Device.DCMotor;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using WebIoT.Hubs;
@@ -30,7 +31,7 @@ namespace WebIoT.Controllers
         }
         public async Task<IActionResult> Up()
         {
-            _l298n.Up();
+            _l298n.Up();           
             InitFX();
             isup = "start";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "42", "前进.");
