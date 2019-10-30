@@ -210,17 +210,17 @@
                         });
                         break;
                     case "down":
-                        $.get("/L298N/Down="+speed, function (data) {
+                        $.get("/L298N/Down?speed="+speed, function (data) {
                             console.log(data);
                         });
                         break;
                     case "left":
-                        $.get("/L298N/Left="+speed, function (data) {
+                        $.get("/L298N/Left?speed="+speed, function (data) {
                             console.log(data);
                         });
                         break;
                     case "right":
-                        $.get("/L298N/Right="+speed, function (data) {
+                        $.get("/L298N/Right?speed="+speed, function (data) {
                             console.log(data);
                         });
                         break;
