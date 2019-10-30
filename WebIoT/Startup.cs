@@ -22,14 +22,12 @@ namespace WebIoT
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<SiteConfig>(Configuration.GetSection("SiteConfig"));
-          
-            //services.AddSingleton<Peripherals.AM2302.AM2302Client>(); // 第三方库 没有返回NAN情况
+            services.Configure<SiteConfig>(Configuration.GetSection("SiteConfig"));                     
             services.AddSingleton<ILedClient, LedClient>();
             services.AddSingleton<IHJR2Client, HJR2Client>();
             services.AddSingleton<IL298NClient, L298NClient>();
             services.AddSingleton<IHcsr04Client, Hcsr04Client>();
-
+            //services.AddSingleton<Peripherals.AM2302.AM2302Client>(); // 第三方库 没有返回NAN情况
             //services.AddSingleton<InfraredSensor>(_ => new InfraredSensor(Pi.Gpio[BcmPin.Gpio25], true));
             services.AddSignalR();
             services.AddControllersWithViews();

@@ -8,6 +8,11 @@
         public int LedPin { get; set; }
 
         /// <summary>
+        /// 软件模拟PWM
+        /// </summary>
+        public int SoftPWMPin { get;set;}
+
+        /// <summary>
         /// 超声波控制端 默认23
         /// </summary>
         public int TriggerPin { get; set; }

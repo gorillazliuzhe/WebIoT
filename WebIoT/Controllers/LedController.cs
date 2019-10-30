@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading;
+using System.Threading.Tasks;
 using WebIoT.Playground;
 
 namespace WebIoT.Controllers
@@ -20,6 +22,26 @@ namespace WebIoT.Controllers
         {
             _ledClient.LedOff();
             return Content("Led off");
+        }
+        public IActionResult LedPWMOn()
+        {
+            _ledClient.LedHardPWMOn();
+            return Content("Led hardpwm on");
+        }
+        public IActionResult LedPWMOff()
+        {
+            _ledClient.LedHardPWMOff();
+            return Content("Led hardpwm off");
+        }
+        public IActionResult LedSoftPWMOn(CancellationToken cancellationToken)
+        {
+            _ledClient.LedSoftPWMOn(cancellationToken);
+            return Content("Led Softpwm on");
+        }
+        public IActionResult LedSoftPWMOff(CancellationToken cancellationToken)
+        {
+            _ledClient.LedSoftPWMOff(cancellationToken);
+            return Content("Led Softpwm off");
         }
     }
 }
