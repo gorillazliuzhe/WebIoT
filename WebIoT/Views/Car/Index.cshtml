@@ -31,7 +31,6 @@
     </li>
 </ul>
 
-
 <div class="control-wrapper">
     <div class="control-btn control-top" id="up" onclick="carmove(this,'up')">
         <i class="fa fa-chevron-up">∧</i>
@@ -67,6 +66,24 @@
     </div>
 </div>
 
+<div>
+    <label class="demo--label">
+        <input class="demo--radio" type="radio" name="demo-radio" checked="checked" value="0.4">
+        <span class="demo--radioInput"></span>40
+    </label>
+    <label class="demo--label">
+        <input class="demo--radio" type="radio" name="demo-radio" value="0.6">
+        <span class="demo--radioInput"></span>60
+    </label>
+    <label class="demo--label">
+        <input class="demo--radio" type="radio" name="demo-radio" value="0.8">
+        <span class="demo--radioInput"></span>80
+    </label>
+    <label class="demo--label">
+        <input class="demo--radio" type="radio" name="demo-radio" value="1.0">
+        <span class="demo--radioInput"></span>100
+    </label>
+</div>
 
 @section Scripts{
     <script src="~/js/signalr.js"></script>
@@ -184,25 +201,26 @@
 
         // 小车移动
         function carmove(th, type) {
-            if (iswf=="start") {
+            if (iswf == "start") {
+                var speed = $("input[name='demo-radio']:checked").val();
                 switch (type) {
                     case "up":
-                        $.get("/L298N/Up", function (data) {
+                        $.get("/L298N/Up?speed="+speed, function (data) {
                             console.log(data);
                         });
                         break;
                     case "down":
-                        $.get("/L298N/Down", function (data) {
+                        $.get("/L298N/Down="+speed, function (data) {
                             console.log(data);
                         });
                         break;
                     case "left":
-                        $.get("/L298N/Left", function (data) {
+                        $.get("/L298N/Left="+speed, function (data) {
                             console.log(data);
                         });
                         break;
                     case "right":
-                        $.get("/L298N/Right", function (data) {
+                        $.get("/L298N/Right="+speed, function (data) {
                             console.log(data);
                         });
                         break;

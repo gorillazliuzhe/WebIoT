@@ -58,6 +58,7 @@ namespace WebIoT.Controllers
                 sensor.Start();
             });
 
+
             //Task.Run(async () =>
             //{
             //    using (Iot.Device.DHTxx.Dht22 dht = new Iot.Device.DHTxx.Dht22(_dthpin))
@@ -74,7 +75,7 @@ namespace WebIoT.Controllers
             //        }
             //    }
             //});
-            #endregion           
+            #endregion
 
             return View();
         }
