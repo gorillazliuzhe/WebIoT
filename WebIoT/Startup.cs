@@ -29,8 +29,6 @@ namespace WebIoT
             services.AddSingleton<IHJR2Client, HJR2Client>();
             services.AddSingleton<IL298NClient, L298NClient>();
             services.AddSingleton<IHcsr04Client, Hcsr04Client>();
-            //services.AddSingleton<Peripherals.AM2302.AM2302Client>(); // 第三方库 没有返回NAN情况
-            //services.AddSingleton<InfraredSensor>(_ => new InfraredSensor(Pi.Gpio[BcmPin.Gpio25], true));
             services.AddSignalR();
             services.AddControllersWithViews();
         }
