@@ -1,12 +1,11 @@
-﻿using Iot.Device.DCMotor;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using System;
 using System.Device.Gpio;
 using WebIoT.Models;
 
 namespace WebIoT.Playground
 {
-    public class L298NClient : IL298NClient, IDisposable
+    public class L298NClient : IL298NClient
     {
         private readonly int _in1;
         private readonly int _in2;
@@ -15,13 +14,13 @@ namespace WebIoT.Playground
         private readonly GpioController _controller;
         private readonly object _locker = new object();
 
-        public L298NClient(IOptions<SiteConfig> option, PinNumberingScheme pinNumberingScheme = PinNumberingScheme.Logical)
+        public L298NClient(IOptions<SiteConfig> option, GpioController controller)
         {
             _in1 = option.Value.L298nIn1Pin;
             _in2 = option.Value.L298nIn2Pin;
             _in3 = option.Value.L298nIn3Pin;
             _in4 = option.Value.L298nIn4Pin;
-            _controller = new GpioController(pinNumberingScheme);
+            _controller = controller;
             Start();
             Pause();
         }
@@ -113,17 +112,6 @@ namespace WebIoT.Playground
                 if (_controller.IsPinOpen(_in4))
                     _controller.ClosePin(_in4);
             }
-        }
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _controller?.Dispose();
-            }
-        }
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        }       
     }
 }

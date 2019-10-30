@@ -9,18 +9,18 @@ using WebIoT.Models;
 
 namespace WebIoT.Playground
 {
-    public class LedClient : ILedClient, IDisposable
+    public class LedClient : ILedClient
     {
         private readonly int _ledPin;
         private readonly int _softpwmPin;
 
         private readonly GpioController _controller;
         private readonly object _locker = new object();
-        public LedClient(IOptions<SiteConfig> option, PinNumberingScheme pinNumberingScheme = PinNumberingScheme.Logical)
+        public LedClient(IOptions<SiteConfig> option, GpioController controller)
         {
             _ledPin = option.Value.LedPin;
             _softpwmPin = option.Value.SoftPWMPin;
-            _controller = new GpioController(pinNumberingScheme);
+            _controller = controller;
         }
         public bool IsRunning { get; set; }
         public void LedOn()
@@ -132,19 +132,6 @@ namespace WebIoT.Playground
                 using PwmChannel _pwm = new SoftwarePwmChannel(_softpwmPin, frequency: 400, dutyCycle: 0);
                 _pwm.Stop();
             }
-        }
-
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _controller?.Dispose();
-            }
-        }
-        public void Dispose()
-        {
-            Dispose(true);
         }
     }
 }

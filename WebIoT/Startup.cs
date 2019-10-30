@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Device.Gpio;
 using Unosquare.RaspberryIO;
 using WebIoT.Hubs;
 using WebIoT.Models;
@@ -22,7 +23,8 @@ namespace WebIoT
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<SiteConfig>(Configuration.GetSection("SiteConfig"));                     
+            services.Configure<SiteConfig>(Configuration.GetSection("SiteConfig"));
+            services.AddSingleton(_ => new GpioController(PinNumberingScheme.Logical));
             services.AddSingleton<ILedClient, LedClient>();
             services.AddSingleton<IHJR2Client, HJR2Client>();
             services.AddSingleton<IL298NClient, L298NClient>();

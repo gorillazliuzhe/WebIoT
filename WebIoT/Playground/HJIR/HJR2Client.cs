@@ -8,7 +8,7 @@ using WebIoT.Models;
 
 namespace WebIoT.Playground
 {
-    public class HJR2Client : IHJR2Client, IDisposable
+    public class HJR2Client : IHJR2Client
     {
         private readonly int _left;
         private readonly int _right;
@@ -16,11 +16,11 @@ namespace WebIoT.Playground
         private readonly object _locker = new object();
         public event EventHandler<List<HJIR2ReadEventArgs>> OnDataAvailable;
         public bool IsRunning { get; set; }
-        public HJR2Client(IOptions<SiteConfig> option, PinNumberingScheme pinNumberingScheme = PinNumberingScheme.Logical)
+        public HJR2Client(IOptions<SiteConfig> option, GpioController controller)
         {
             _left = option.Value.IR1Pin;
             _right = option.Value.IR2Pin;
-            _controller = new GpioController(pinNumberingScheme);
+            _controller = controller;
         }
         public void Start()
         {
@@ -55,7 +55,6 @@ namespace WebIoT.Playground
                 OnDataAvailable?.Invoke(this, sensorData);
                 Thread.Sleep(200);
             }
-            Dispose(true);
         }
         private List<HJIR2ReadEventArgs> RetrieveSensorData()
         {
@@ -78,14 +77,5 @@ namespace WebIoT.Playground
                 return list;
             }
         }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _controller?.Dispose();
-            }
-        }
-        public void Dispose() => Stop();
     }
 }

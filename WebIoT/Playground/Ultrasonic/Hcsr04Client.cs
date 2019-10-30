@@ -9,24 +9,24 @@ using WebIoT.Tools;
 
 namespace WebIoT.Playground
 {
-    public class Hcsr04Client : IHcsr04Client, IDisposable
+    public class Hcsr04Client : IHcsr04Client
     {
         private readonly int _echo;
         private readonly int _trigger;
-        private int _lastMeasurment = 0;
-        private readonly GpioController _controller;
+        private int _lastMeasurment = 0;       
         public const int NoObstacleDistance = -1;
         private readonly object _locker = new object();
+        private readonly GpioController _controller;
         private readonly Stopwatch _timer = new Stopwatch();
         public event EventHandler<Hcsr04ReadEventArgs> OnDataAvailable;
 
         public bool IsRunning { get; set; }
 
-        public Hcsr04Client(IOptions<SiteConfig> option, PinNumberingScheme pinNumberingScheme = PinNumberingScheme.Logical)
+        public Hcsr04Client(IOptions<SiteConfig> option, GpioController controller)
         {
             _echo = option.Value.EchoPin;
             _trigger = option.Value.TriggerPin;
-            _controller = new GpioController(pinNumberingScheme);
+            _controller = controller;
         }
 
         public void Start()
@@ -66,7 +66,6 @@ namespace WebIoT.Playground
                 OnDataAvailable?.Invoke(this, sensorData);
                 Thread.Sleep(200);
             }
-            Dispose(true);
         }
         private Hcsr04ReadEventArgs RetrieveSensorData()
         {
@@ -112,14 +111,5 @@ namespace WebIoT.Playground
             }
 
         }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _controller?.Dispose();
-            }
-        }
-        public void Dispose() => Stop();
     }
 }
