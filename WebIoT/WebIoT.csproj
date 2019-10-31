@@ -5,9 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Iot.Device.Bindings" Version="1.0.0" />   
+    <PackageReference Include="Iot.Device.Bindings" Version="1.0.0" />
+    <PackageReference Include="Metro.Logging.File" Version="1.0.3" />
+    <PackageReference Include="Metro.Logging.File.UI" Version="1.0.3" />   
     <PackageReference Include="System.Device.Gpio" Version="1.0.0" />
-    <PackageReference Include="Unosquare.Swan.Lite" Version="2.4.1" />
+    <PackageReference Include="Unosquare.Swan.Lite" Version="2.4.2" />
     <PackageReference Include="Unosquare.Raspberry.IO" Version="0.27.0" />
     <PackageReference Include="Unosquare.RaspberryIO.Peripherals" Version="0.5.0" />
     <PackageReference Include="Unosquare.WiringPi" Version="0.5.0" />

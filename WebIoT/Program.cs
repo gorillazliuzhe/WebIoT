@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace WebIoT
 {
@@ -16,6 +17,7 @@ namespace WebIoT
                 {
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseUrls("http://localhost:5000/");
+                    webBuilder.ConfigureLogging(builder => builder.AddFile());
                 });
     }
 }

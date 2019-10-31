@@ -27,8 +27,9 @@ namespace WebIoT.Hubs
         /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception ex)
         {
-            string groupName = Context.GetHttpContext().Request.Query["groupName"];
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+            //string groupName = Context.GetHttpContext().Request.Query["groupName"];
+            //await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+            await Clients.All.SendAsync("ReceiveMessage", "99", $"{Context.ConnectionId} offline");
         }
 
         /// <summary>

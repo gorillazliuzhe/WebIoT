@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Device.Gpio;
 using Unosquare.RaspberryIO;
+using WebIoT.Filter;
 using WebIoT.Hubs;
 using WebIoT.Models;
 using WebIoT.Playground;
@@ -29,8 +30,12 @@ namespace WebIoT
             services.AddSingleton<IHJR2Client, HJR2Client>();
             services.AddSingleton<IL298NClient, L298NClient>();
             services.AddSingleton<IHcsr04Client, Hcsr04Client>();
+            services.AddLoggingFileUI();
             services.AddSignalR();
-            services.AddControllersWithViews();
+            services.AddRazorPages();
+            services.AddControllersWithViews(options => {
+                options.Filters.Add<GlobalExceptionFilter>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +69,7 @@ namespace WebIoT
                     name: "default",
                     pattern: "{controller=Car}/{action=Index}/{id?}");
                 endpoints.MapHub<ChatHub>("/chathub");
+                endpoints.MapRazorPages();
             });
         }
     }
