@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Device.Gpio;
 using Unosquare.RaspberryIO;
 using WebIoT.Filter;
@@ -18,7 +19,6 @@ namespace WebIoT
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -38,11 +38,10 @@ namespace WebIoT
                 options.Filters.Add<GlobalExceptionFilter>();
             });
             //.AddRazorRuntimeCompilation(); // 修改视图后刷新既显示效果 https://www.cnblogs.com/jiyuwu/p/11770241.html
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, IHostApplicationLifetime appLifetime)
         {
             if (env.IsDevelopment())
             {
@@ -74,6 +73,13 @@ namespace WebIoT
                 endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapRazorPages();
             });
+            //appLifetime.ApplicationStopped.Register(() =>
+            //{
+            //    //获取ServiceProvider
+            //    //var serviceProvider = services.BuildServiceProvider();
+            //    var gpio = serviceProvider.GetService<GpioController>();
+            //    gpio.Dispose();
+            //});
         }
     }
 }
