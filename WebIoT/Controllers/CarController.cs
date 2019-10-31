@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
+using System.Threading;
 using System.Threading.Tasks;
 using Unosquare.RaspberryIO;
 using Unosquare.RaspberryIO.Peripherals;
@@ -18,7 +19,7 @@ namespace WebIoT.Controllers
             _chatHub = chatHub;
             _dthpin = option.Value.DHT22Pin;
         }
-        public IActionResult Index()
+        public IActionResult Index(CancellationToken cancellationToken)
         {
             ViewBag.IsCSB = Hcsr04Controller.iscsb;
             ViewBag.IsBZ = HJIR2Controller.isbz;
@@ -42,7 +43,7 @@ namespace WebIoT.Controllers
                     await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{e.Temperature:0.00}°C # {e.HumidityPercentage:00.0}%");
                 };
                 sensor.Start();
-            });
+            }, cancellationToken);
 
 
             //Task.Run(async () =>
