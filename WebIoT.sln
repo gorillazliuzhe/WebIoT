@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebIoT", "WebIoT\WebIoT.csproj", "{2E4B16AA-52D2-4C49-BBC2-8448AC0F0E06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebIoT", "WebIoT\WebIoT.csproj", "{2E4B16AA-52D2-4C49-BBC2-8448AC0F0E06}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metro.Logging.File", "Metro.Logging.File\Metro.Logging.File.csproj", "{DECD9722-B961-4335-9CF8-8DFCFBEE5EB2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metro.Logging.File.UI", "Metro.Logging.File.UI\Metro.Logging.File.UI.csproj", "{78231B3A-D671-4B08-9BAE-E7D7F8C7997A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{2E4B16AA-52D2-4C49-BBC2-8448AC0F0E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E4B16AA-52D2-4C49-BBC2-8448AC0F0E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E4B16AA-52D2-4C49-BBC2-8448AC0F0E06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DECD9722-B961-4335-9CF8-8DFCFBEE5EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DECD9722-B961-4335-9CF8-8DFCFBEE5EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DECD9722-B961-4335-9CF8-8DFCFBEE5EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DECD9722-B961-4335-9CF8-8DFCFBEE5EB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78231B3A-D671-4B08-9BAE-E7D7F8C7997A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78231B3A-D671-4B08-9BAE-E7D7F8C7997A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78231B3A-D671-4B08-9BAE-E7D7F8C7997A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78231B3A-D671-4B08-9BAE-E7D7F8C7997A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
