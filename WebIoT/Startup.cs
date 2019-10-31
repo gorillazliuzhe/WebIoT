@@ -33,9 +33,12 @@ namespace WebIoT
             services.AddLoggingFileUI();
             services.AddSignalR();
             services.AddRazorPages();
-            services.AddControllersWithViews(options => {
+            services.AddControllersWithViews(options =>
+            {
                 options.Filters.Add<GlobalExceptionFilter>();
             });
+            //.AddRazorRuntimeCompilation(); // 修改视图后刷新既显示效果 https://www.cnblogs.com/jiyuwu/p/11770241.html
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

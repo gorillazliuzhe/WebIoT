@@ -73,6 +73,7 @@ namespace WebIoT.Controllers
                         }
                         await _chatHub.Clients.All.SendAsync("ReceiveMessage", "3", $"NEC Data: {BitConverter.ToString(necData).Replace("-", " "),12}");
                         #endregion
+                        
                         if (InfraredSensor.NecDecoder.IsRepeatCode(e.Pulses))
                             return;
                     }

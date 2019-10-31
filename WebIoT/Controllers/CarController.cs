@@ -33,7 +33,22 @@ namespace WebIoT.Controllers
 
             #region 温度湿度
 
-            Task.Run(() =>
+            //Task.Run(async () => // 会出现Nan情况
+            //{
+            //    using Iot.Device.DHTxx.Dht22 dht = new Iot.Device.DHTxx.Dht22(_dthpin);
+            //    while (true)
+            //    {
+            //        Iot.Units.Temperature temperature = dht.Temperature;
+            //        double humidity = dht.Humidity;
+            //        if (!double.IsNaN(temperature.Celsius) && !double.IsNaN(humidity))
+            //        {
+            //            await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{temperature.Celsius:0.00}°C # {humidity:00.0}%");
+            //        }
+            //        Thread.Sleep(2000);
+            //    }
+            //}, cancellationToken);
+           
+            Task.Run(() =>  // 第三方库,没有NAN情况
             {
                 var sensor = DhtSensor.Create(DhtType.Dht22, Pi.Gpio[_dthpin]);
                 sensor.OnDataAvailable += async (s, e) =>
@@ -45,23 +60,6 @@ namespace WebIoT.Controllers
                 sensor.Start();
             }, cancellationToken);
 
-
-            //Task.Run(async () =>
-            //{
-            //    using (Iot.Device.DHTxx.Dht22 dht = new Iot.Device.DHTxx.Dht22(_dthpin))
-            //    {
-            //        while (true)
-            //        {
-            //            Temperature temperature = dht.Temperature;
-            //            double humidity = dht.Humidity;
-            //            if (!double.IsNaN(temperature.Celsius) && !double.IsNaN(humidity))
-            //            {
-            //                await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{temperature.Celsius:0.00}°C # {humidity:00.0}%");
-            //            }
-            //            Thread.Sleep(2000);
-            //        }
-            //    }
-            //});
             #endregion
 
             return View();
