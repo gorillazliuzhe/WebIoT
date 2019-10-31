@@ -26,7 +26,7 @@ namespace WebIoT.Controllers
         {
             if (ishw == "stop")
             {
-                var inputPin = Pi.Gpio[BcmPin.Gpio25]; // BCM Pin 25 or Physical pin 22 on the right side of the header.
+                var inputPin = Pi.Gpio[BcmPin.Gpio25]; // BCM Pin 25 or Physical pin 22 on the right side of the header.               
                 sensor = new InfraredSensor(inputPin, true);
                 sensor.DataAvailable += async (s, e) =>
                 {
@@ -104,7 +104,8 @@ namespace WebIoT.Controllers
         public async Task<IActionResult> Stop()
         {
             ishw = "stop";
-            sensor.Dispose();
+            sensor?.Dispose();
+            sensor = null;
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "71", "红外遥控器关闭");
             return Content("红外遥控器关闭");
         }
