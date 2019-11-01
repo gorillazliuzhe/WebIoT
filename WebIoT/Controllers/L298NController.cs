@@ -14,6 +14,8 @@ namespace WebIoT.Controllers
         public static string isdown = "stop";
         public static string isleft = "stop";
         public static string isright = "stop";
+        public static string isdownleft = "stop";
+        public static string isdownright = "stop";
         public static string ispause = "stop";
         private readonly IL298NClient _l298n;
         private readonly IHubContext<ChatHub> _chatHub;
@@ -45,6 +47,7 @@ namespace WebIoT.Controllers
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "43", "后退.");
             return Content("后退");
         }
+        // 前左转
         public async Task<IActionResult> Left(double speed = 0.6)
         {
             _l298n.Move(3, speed);
@@ -53,6 +56,7 @@ namespace WebIoT.Controllers
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "44", "左转.");
             return Content("左转");
         }
+        // 前右转
         public async Task<IActionResult> Right(double speed = 0.6)
         {
             _l298n.Move(4, speed);
@@ -60,6 +64,24 @@ namespace WebIoT.Controllers
             isright = "start";
             await _chatHub.Clients.All.SendAsync("ReceiveMessage", "45", "右转.");
             return Content("右转");
+        }
+        // 后左转
+        public async Task<IActionResult> DownLeft(double speed = 0.6)
+        {
+            _l298n.Move(6, speed);
+            InitFX();
+            isdownleft = "start";
+            await _chatHub.Clients.All.SendAsync("ReceiveMessage", "47", "后左转.");
+            return Content("左转");
+        }
+        // 后右转
+        public async Task<IActionResult> DownRight(double speed = 0.6)
+        {
+            _l298n.Move(7, speed);
+            InitFX();
+            isdownright = "start";
+            await _chatHub.Clients.All.SendAsync("ReceiveMessage", "48", "后右转.");
+            return Content("后右转");
         }
         public async Task<IActionResult> Pause()
         {
@@ -86,6 +108,8 @@ namespace WebIoT.Controllers
             isleft = "stop";
             isright = "stop";
             ispause = "stop";
+            isdownleft = "stop";
+            isdownright = "stop";
         }
     }
 }
