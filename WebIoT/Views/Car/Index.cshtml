@@ -229,9 +229,10 @@
                         });
                         break;
                     case "right":
-                        $.get("/L298N/Right?speed="+speed, function (data) {
+                        $.get("/L298N/Right?speed=" + speed, function (data) {
                             console.log(data);
                         });
+                        break;
                     case "downleft":
                         $.get("/L298N/DownLeft?speed="+speed, function (data) {
                             console.log(data);
