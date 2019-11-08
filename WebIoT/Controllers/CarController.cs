@@ -28,6 +28,8 @@ namespace WebIoT.Controllers
             ViewBag.IsDown = L298NController.isdown;
             ViewBag.IsLeft = L298NController.isleft;
             ViewBag.IsRight = L298NController.isright;
+            ViewBag.IsDownLeft = L298NController.isdownleft;
+            ViewBag.IsDownRight = L298NController.isdownright;
             ViewBag.IsPause = L298NController.ispause;
             ViewBag.IsHW = HX1838Controller.ishw;
 

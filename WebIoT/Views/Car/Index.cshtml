@@ -31,7 +31,7 @@
     </li>
 </ul>
 
-<div class="control-wrapper">
+<div id="move" class="control-wrapper">
     <div class="control-btn control-top" id="up" onclick="carmove(this,'up')">
         <i class="fa fa-chevron-up">∧</i>
         <div class="control-inner-btn control-inner"></div>
@@ -54,7 +54,14 @@
         </div>
     </div>
 </div>
-
+<div class="c-box" style="margin-bottom:10px">
+    <div id="downleft" class="c-left" onclick="carmove(this,'downleft')">
+        <h5 style="text-align:center;margin-top:10px;">左后转</h5>
+    </div>
+    <div id="downright" class="c-right" onclick="carmove(this,'downright')">
+        <h5 style="text-align:center;margin-top:10px;">右后转</h5>
+    </div>
+</div>
 <div class="c-box">
     <div class="c-left">
         <h5 style="text-align:center;margin-top:10px;">超声波数据</h5>
@@ -96,6 +103,8 @@
         var isdown = '@ViewBag.IsDown';
         var isleft = '@ViewBag.IsLeft';
         var isright = '@ViewBag.IsRight';
+        var isdownleft = '@ViewBag.IsDownLeft';
+        var isdownright = '@ViewBag.IsDownRight';
         var ispause = '@ViewBag.IsPause';
         $(document).ready(function () {
             if (iscsb=="start") {
@@ -220,7 +229,17 @@
                         });
                         break;
                     case "right":
-                        $.get("/L298N/Right?speed="+speed, function (data) {
+                        $.get("/L298N/Right?speed=" + speed, function (data) {
+                            console.log(data);
+                        });
+                        break;
+                    case "downleft":
+                        $.get("/L298N/DownLeft?speed="+speed, function (data) {
+                            console.log(data);
+                        });
+                        break;
+                    case "downright":
+                        $.get("/L298N/DownRight?speed="+speed, function (data) {
                             console.log(data);
                         });
                         break;
@@ -301,22 +320,40 @@
                 case "42":
                     $("#up").siblings('div').removeClass('CarClick');
                     $("#up").addClass('CarClick');
+                    $("#downleft").removeClass('CarClick');
+                    $("#downright").removeClass('CarClick');
                     break;
                 case "43":
                     $("#down").siblings('div').removeClass('CarClick');
                     $("#down").addClass('CarClick');
+                    $("#downleft").removeClass('CarClick');
+                    $("#downright").removeClass('CarClick');
                     break;
                 case "44":
                     $("#left").siblings('div').removeClass('CarClick');
                     $("#left").addClass('CarClick');
+                    $("#downleft").removeClass('CarClick');
+                    $("#downright").removeClass('CarClick');
                     break;
                 case "45":
                     $("#right").siblings('div').removeClass('CarClick');
                     $("#right").addClass('CarClick');
+                    $("#downleft").removeClass('CarClick');
+                    $("#downright").removeClass('CarClick');
                     break;
                 case "46":
                     $("#pause").siblings('div').removeClass('CarClick');
                     $("#pause").addClass('CarClick');
+                    $("#downleft").removeClass('CarClick');
+                    $("#downright").removeClass('CarClick');
+                    break;
+                case "47":
+                    $("#move").children('div').removeClass('CarClick');
+                    $("#downleft").addClass('CarClick');
+                    break;
+                case "48":
+                    $("#move").children('div').removeClass('CarClick');
+                    $("#downright").addClass('CarClick');
                     break;
                 case "70":
                     $("#hw").prop("checked", true);

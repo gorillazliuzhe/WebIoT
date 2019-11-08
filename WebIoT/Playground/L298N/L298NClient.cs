@@ -70,6 +70,12 @@ namespace WebIoT.Playground
                         case 5:
                             Pause();
                             break;
+                        case 6:
+                            DownLeft();
+                            break;
+                        case 7:
+                            DownRight();
+                            break;
                         default:
                             Pause();
                             break;
@@ -126,6 +132,30 @@ namespace WebIoT.Playground
                 _controller.Write(_in2, PinValue.Low);
                 _controller.Write(_in3, PinValue.Low);
                 _controller.Write(_in4, PinValue.High);
+                _pwma.DutyCycle = Math.Abs(0);
+                _pwmb.DutyCycle = Math.Abs(Speed);
+            }
+        }
+        private void DownRight()
+        {
+            lock (_locker)
+            {
+                _controller.Write(_in1, PinValue.High);
+                _controller.Write(_in2, PinValue.Low);
+                _controller.Write(_in3, PinValue.Low);
+                _controller.Write(_in4, PinValue.Low);
+                _pwma.DutyCycle = Math.Abs(Speed);
+                _pwmb.DutyCycle = Math.Abs(0);
+            }
+        }
+        private void DownLeft()
+        {
+            lock (_locker)
+            {
+                _controller.Write(_in1, PinValue.Low);
+                _controller.Write(_in2, PinValue.Low);
+                _controller.Write(_in3, PinValue.High);
+                _controller.Write(_in4, PinValue.Low);
                 _pwma.DutyCycle = Math.Abs(0);
                 _pwmb.DutyCycle = Math.Abs(Speed);
             }
