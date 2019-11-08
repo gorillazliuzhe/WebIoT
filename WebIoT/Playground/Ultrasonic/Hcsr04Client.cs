@@ -80,19 +80,19 @@ namespace WebIoT.Playground
                     Thread.Sleep(TimeSpan.FromMilliseconds(Environment.TickCount - _lastMeasurment));
                 }
 
-                _controller.Write(_trigger, PinValue.High);
-                Thread.Sleep(TimeSpan.FromMilliseconds(0.01));
-                _controller.Write(_trigger, PinValue.Low);
+                _controller.Write(_trigger, PinValue.High);     // 上高电平
+                Thread.Sleep(TimeSpan.FromMilliseconds(0.01));  // 持续一段时间,发出足够的脉冲
+                _controller.Write(_trigger, PinValue.Low);      // 设置低电平
 
 
-                if (!GpioEX.WaitForValue(_controller, _echo, PinValue.Low))
+                if (!GpioEX.WaitForValue(_controller, _echo, PinValue.Low)) // 等待低电平结束,记录时间
                     throw new TimeoutException();
 
                 _lastMeasurment = Environment.TickCount;
 
                 _timer.Start();
 
-                if (!GpioEX.WaitForValue(_controller, _echo, PinValue.High))
+                if (!GpioEX.WaitForValue(_controller, _echo, PinValue.High)) // 等待高电平结束,记录时间
                     throw new TimeoutException();
 
                 _timer.Stop();

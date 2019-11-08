@@ -10,7 +10,6 @@ namespace WebIoT.Controllers
     public class Hcsr04Controller : Controller
     {
         public static string iscsb = "stop";
-        //private readonly UltrasonicHcsr04Client _hcsr04;
         private readonly IHcsr04Client _hcsr04;
         private readonly IHubContext<ChatHub> _chatHub;
         public Hcsr04Controller(IHcsr04Client hcsr04, IHubContext<ChatHub> chatHub)
