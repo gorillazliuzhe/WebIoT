@@ -1,0 +1,163 @@
+﻿body {
+    background: black;
+    font-family: 'Impact';
+}
+
+.kedu {
+    transform-origin: 0px 0px;
+    align-items: stretch;
+    align-content: flex-start;
+    padding: 0px;
+    width: 300px;
+    height: 161px;
+    margin: 40px auto 0 auto;
+    /*!*-------------------膽��上ぇ絨�*****!********************膽��上ぇ絨�******/
+    transform: translate(0px, 0px) scale(1, 1);
+}
+
+.ruler-text {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    flex: 0 0 auto;
+    position: absolute;
+    overflow: visible;
+    border: 1px solid rgba(255, 255, 255, 0);
+    line-height: 24px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    letter-spacing: 0px;
+    padding: 0px;
+    border-radius: 0px;
+    white-space: pre;
+    z-index: 0;
+}
+
+    .ruler-text span {
+        font-size: 12px;
+        color: rgb(255, 126, 71);
+        margin-left: 0.2rem;
+    }
+
+.ruler {
+    border-width: 0px;
+    align-items: stretch;
+    align-content: flex-start;
+    padding: 0px;
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+}
+
+.kedu-text {
+    border-width: 0px;
+    align-items: stretch;
+    align-content: flex-start;
+    padding: 0px;
+    width: 300px;
+    height: 300px;
+    overflow: visible;
+}
+
+.ruler-deg {
+    border-width: 0px;
+    align-items: stretch;
+    align-content: flex-start;
+    padding: 0px;
+    width: 4px;
+    left: 0px;
+    right: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 10px;
+    top: 0px;
+    overflow: hidden;
+}
+
+.ruler-bg {
+    background: rgb(36, 39, 46);
+}
+
+.ruler-active {
+    background: #F18455;
+}
+
+.absolute {
+    position: absolute;
+}
+
+#kedu img {
+    position: absolute;
+    width: 12px;
+    left: 144px;
+    height: 20px;
+    top: 74px;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid rgba(255, 255, 255, 0);
+    width: 12px;
+}
+
+.kedu-text-item {
+    overflow: visible;
+    opacity: 0.5;
+    border: 1px solid rgba(255, 255, 255, 0);
+    font-size: 18px;
+    font-weight: normal;
+    color: rgb(255, 255, 255);
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    letter-spacing: 0px;
+    padding: 0px;
+    left: 0px;
+    right: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    top: 10px;
+    border-radius: 0px;
+    white-space: pre;
+}
+
+.kedu-text-container {
+    transform-origin: 0px 0px;
+    align-items: stretch;
+    align-content: flex-start;
+    left: 10%;
+    padding: 0px;
+    width: 80%;
+    height: 161px;
+    bottom: 0;
+    transform: translate(0px, 16px) scale(0.796667, 0.796667);
+}
+
+.ruler-title {
+    border: 1px solid rgba(255, 255, 255, 0);
+    font-size: 14px;
+    font-weight: normal;
+    color: rgb(149, 152, 158);
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    letter-spacing: 0px;
+    padding: 0px;
+    left: 50%;
+    bottom: 0;
+    border-radius: 0px;
+    white-space: pre;
+    z-index: 1;
+}
+
+#zz {
+    position: fixed;
+    top: 250px;
+    left: 50%;
+    margin-left: -150px;
+    width: 300px;
+    height: 30px;
+    line-height: 30px;
+}

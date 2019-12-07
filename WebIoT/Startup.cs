@@ -69,7 +69,7 @@ namespace WebIoT
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Car}/{action=Index}/{id?}");
+                    pattern: "{controller=Dth}/{action=Index}/{id?}");
                 endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapRazorPages();
             });
