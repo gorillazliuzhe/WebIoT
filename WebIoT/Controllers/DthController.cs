@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -21,16 +22,30 @@ namespace WebIoT.Controllers
             _chatHub = chatHub;
             _dthpin = option.Value.DHT22Pin;
         }
-        public IActionResult Index()
+        public IActionResult Index(CancellationToken cancellationToken)
         {
-            var sensor = DhtSensor.Create(DhtType.Dht22, Pi.Gpio[_dthpin]);
-            sensor.OnDataAvailable += async (s, e) =>
+            Task.Run(async () => // 会出现Nan情况
             {
-                if (!e.IsValid)
-                    return;
-                await _chatHub.Clients.All.SendAsync("ReceiveMessage", "dth", $"{e.Temperature:0.00}#{e.HumidityPercentage:00.0}");
-            };
-            sensor.Start();
+                using Iot.Device.DHTxx.Dht22 dht = new Iot.Device.DHTxx.Dht22(_dthpin);
+                while (true)
+                {
+                    Iot.Units.Temperature temperature = dht.Temperature;
+                    double humidity = dht.Humidity;
+                    if (!double.IsNaN(temperature.Celsius) && !double.IsNaN(humidity))
+                    {
+                        await _chatHub.Clients.All.SendAsync("ReceiveMessage", "dth", $"{temperature.Celsius:0.00}#{humidity:00.0}");
+                    }
+                    Thread.Sleep(2000);
+                }
+            }, cancellationToken);
+            //var sensor = DhtSensor.Create(DhtType.Dht22, Pi.Gpio[_dthpin]);
+            //sensor.OnDataAvailable += async (s, e) =>
+            //{
+            //    if (!e.IsValid)
+            //        return;
+            //    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "dth", $"{e.Temperature:0.00}#{e.HumidityPercentage:00.0}");
+            //};
+            //sensor.Start();
             return View();
         }
     }
