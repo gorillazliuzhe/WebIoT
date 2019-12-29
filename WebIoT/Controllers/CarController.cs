@@ -49,7 +49,7 @@ namespace WebIoT.Controllers
             //        Thread.Sleep(2000);
             //    }
             //}, cancellationToken);
-           
+
             Task.Run(() =>  // 第三方库,没有NAN情况
             {
                 var sensor = DhtSensor.Create(DhtType.Dht22, Pi.Gpio[_dthpin]);
