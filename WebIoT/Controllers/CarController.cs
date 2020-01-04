@@ -50,17 +50,17 @@ namespace WebIoT.Controllers
             //    }
             //}, cancellationToken);
 
-            Task.Run(() =>  // 第三方库,没有NAN情况
-            {
-                var sensor = DhtSensor.Create(DhtType.Dht22, Pi.Gpio[_dthpin]);
-                sensor.OnDataAvailable += async (s, e) =>
-                {
-                    if (!e.IsValid)
-                        return;
-                    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{e.Temperature:0.00}°C # {e.HumidityPercentage:00.0}%");
-                };
-                sensor.Start();
-            }, cancellationToken);
+            //Task.Run(() =>  // 第三方库,没有NAN情况
+            //{
+            //    var sensor = DhtSensor.Create(DhtType.Dht22, Pi.Gpio[_dthpin]);
+            //    sensor.OnDataAvailable += async (s, e) =>
+            //    {
+            //        if (!e.IsValid)
+            //            return;
+            //        await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{e.Temperature:0.00}°C # {e.HumidityPercentage:00.0}%");
+            //    };
+            //    sensor.Start();
+            //}, cancellationToken);
 
             #endregion
 
