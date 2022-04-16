@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -216,8 +215,9 @@
             if (type == "dth") {
                 var data = msg.split('#');
                 if (data.length == 2) {
-                    loadData(data[0]);
-                    $("#sd").text(data[1] + "%")
+                    var tm=data[0].replace(/°C/, "")
+                    loadData(tm); //°C
+                    $("#sd").text(data[1])
                 }
             }
         });
