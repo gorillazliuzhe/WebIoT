@@ -1,8 +1,8 @@
-﻿using Swan.Diagnostics;
+﻿//using Swan.Diagnostics;
 using System;
 using System.Threading;
-using Unosquare.RaspberryIO;
-using Unosquare.RaspberryIO.Abstractions;
+//using Unosquare.RaspberryIO;
+//using Unosquare.RaspberryIO.Abstractions;
 
 namespace WebIoT.Peripherals.AM2302
 {
@@ -10,7 +10,7 @@ namespace WebIoT.Peripherals.AM2302
     {
         private const long BitPulseMidMicroseconds = 60; // 位脉冲微妙时间 (26 ... 28)µs for false; (29 ... 70)µs for true
 
-        private readonly IGpioPin _dataPin = Pi.Gpio[BcmPin.Gpio17];
+        //private readonly IGpioPin _dataPin = Pi.Gpio[BcmPin.Gpio17];
         private readonly Timer _readTimer;
         private bool _disposedValue;
         private int _period;
@@ -134,74 +134,75 @@ namespace WebIoT.Peripherals.AM2302
         /// <returns>从传感器读取的事件参数.</returns>
         private DhtReadEventArgs RetrieveSensorData()
         {
-            // 准备缓冲区以存储度量和校验和
-            var data = new byte[5];
+            //// 准备缓冲区以存储度量和校验和
+            //var data = new byte[5];
 
-            // 开始与传感器通信
-            // 通知传感器必须完成最后一次执行并将其状态置于空闲状态
-            _dataPin.PinMode = GpioPinDriveMode.Output;
+            //// 开始与传感器通信
+            //// 通知传感器必须完成最后一次执行并将其状态置于空闲状态
+            //_dataPin.PinMode = GpioPinDriveMode.Output;
 
-            // 发送请求以将传输从板传输到传感器
-            _dataPin.Write(GpioPinValue.Low);
-            Pi.Timing.SleepMicroseconds(PullDownMicroseconds);
-            _dataPin.Write(GpioPinValue.High);
+            //// 发送请求以将传输从板传输到传感器
+            //_dataPin.Write(GpioPinValue.Low);
+            //Pi.Timing.SleepMicroseconds(PullDownMicroseconds);
+            //_dataPin.Write(GpioPinValue.High);
 
-            // 等待传感器响应
-            _dataPin.PinMode = GpioPinDriveMode.Input;
+            //// 等待传感器响应
+            //_dataPin.PinMode = GpioPinDriveMode.Input;
 
-            try
-            {
-                // 读取传感器的确认
-                if (!_dataPin.WaitForValue(GpioPinValue.Low, 50))
-                    throw new TimeoutException();
+            //try
+            //{
+            //    // 读取传感器的确认
+            //    if (!_dataPin.WaitForValue(GpioPinValue.Low, 50))
+            //        throw new TimeoutException();
 
-                if (!_dataPin.WaitForValue(GpioPinValue.High, 50))
-                    throw new TimeoutException();
+            //    if (!_dataPin.WaitForValue(GpioPinValue.High, 50))
+            //        throw new TimeoutException();
 
-                // 开始数据传输
-                if (!_dataPin.WaitForValue(GpioPinValue.Low, 50))
-                    throw new TimeoutException();
+            //    // 开始数据传输
+            //    if (!_dataPin.WaitForValue(GpioPinValue.Low, 50))
+            //        throw new TimeoutException();
 
-                // 读取40位以获取:
-                //   16 bit -> Humidity (湿度)
-                //   16 bit -> Temperature (温度)
-                //   8 bit -> Checksum (校验和)
-                var stopwatch = new HighResolutionTimer();
+            //    // 读取40位以获取:
+            //    //   16 bit -> Humidity (湿度)
+            //    //   16 bit -> Temperature (温度)
+            //    //   8 bit -> Checksum (校验和)
+            //    var stopwatch = new HighResolutionTimer();
 
-                for (var i = 0; i < 40; i++)
-                {
-                    stopwatch.Reset();
-                    if (!_dataPin.WaitForValue(GpioPinValue.High, 50))
-                        throw new TimeoutException();
+            //    for (var i = 0; i < 40; i++)
+            //    {
+            //        stopwatch.Reset();
+            //        if (!_dataPin.WaitForValue(GpioPinValue.High, 50))
+            //            throw new TimeoutException();
 
-                    stopwatch.Start();
-                    if (!_dataPin.WaitForValue(GpioPinValue.Low, 50))
-                        throw new TimeoutException();
+            //        stopwatch.Start();
+            //        if (!_dataPin.WaitForValue(GpioPinValue.Low, 50))
+            //            throw new TimeoutException();
 
-                    stopwatch.Stop();
+            //        stopwatch.Stop();
 
-                    data[i / 8] <<= 1;
+            //        data[i / 8] <<= 1;
 
-                    // 检查信号是1还是0
-                    if (stopwatch.ElapsedMicroseconds > BitPulseMidMicroseconds)
-                        data[i / 8] |= 1;
-                }
+            //        // 检查信号是1还是0
+            //        if (stopwatch.ElapsedMicroseconds > BitPulseMidMicroseconds)
+            //            data[i / 8] |= 1;
+            //    }
 
-                // 结束传输数据
-                if (!_dataPin.WaitForValue(GpioPinValue.High, 50))
-                    throw new TimeoutException();
+            //    // 结束传输数据
+            //    if (!_dataPin.WaitForValue(GpioPinValue.High, 50))
+            //        throw new TimeoutException();
 
-                // 完成校验
-                return IsDataValid(data) ?
-                        new DhtReadEventArgs(
-                            humidityPercentage: DecodeHumidity(data),
-                            temperatureCelsius: DecodeTemperature(data)) :
-                        DhtReadEventArgs.CreateInvalidReading();
-            }
-            catch
-            {
-                return DhtReadEventArgs.CreateInvalidReading();
-            }
+            //    // 完成校验
+            //    return IsDataValid(data) ?
+            //            new DhtReadEventArgs(
+            //                humidityPercentage: DecodeHumidity(data),
+            //                temperatureCelsius: DecodeTemperature(data)) :
+            //            DhtReadEventArgs.CreateInvalidReading();
+            //}
+            //catch
+            //{
+            //    return DhtReadEventArgs.CreateInvalidReading();
+            //}
+            return DhtReadEventArgs.CreateInvalidReading();
         }
 
         private static bool IsDataValid(byte[] data) => ((data[0] + data[1] + data[2] + data[3]) & 0xff) == data[4];

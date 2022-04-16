@@ -1,12 +1,12 @@
 namespace WebIoT.Peripherals.Infrared
 {
-    using Swan;
-    using Swan.Diagnostics;
+    //using Swan;
+    //using Swan.Diagnostics;
     using System;
     using System.Collections.Generic;
     using System.Text;
     using System.Threading;
-    using Unosquare.RaspberryIO.Abstractions;
+    //using Unosquare.RaspberryIO.Abstractions;
 
     /// <summary>
     /// Implements a digital infrared sensor using the HX1838/VS1838 or the TSOP38238 38kHz digital receiver.
@@ -26,12 +26,12 @@ namespace WebIoT.Peripherals.Infrared
         /// </summary>
         /// <param name="inputPin">The input pin.</param>
         /// <param name="isActiveLow">if set to <c>true</c> [is active low].</param>
-        public InfraredSensor(IGpioPin inputPin, bool isActiveLow)
-        {
-            IsActiveLow = isActiveLow;
-            InputPin = inputPin;
-            ReadInterruptDoWork();
-        }
+        //public InfraredSensor(IGpioPin inputPin, bool isActiveLow)
+        //{
+        //    IsActiveLow = isActiveLow;
+        //    InputPin = inputPin;
+        //    ReadInterruptDoWork();
+        //}
 
         /// <summary>
         /// Occurs when a single sensor pulse is available.
@@ -68,7 +68,7 @@ namespace WebIoT.Peripherals.Infrared
         /// Gets the input pin.
         /// 获取输入引脚.
         /// </summary>
-        public IGpioPin InputPin { get; }
+        //public IGpioPin InputPin { get; }
 
         /// <summary>
         /// Gets a value indicating whether the sensor is active low.
@@ -134,82 +134,82 @@ namespace WebIoT.Peripherals.Infrared
         private void ReadInterruptDoWork()
         {
             // Define some constants
-            const long gapUsecs = 5000; // 缺口用例
-            const long maxElapsedMicroseconds = 250000;
-            const long minElapsedMicroseconds = 50;
-            const int idleCheckIntervalMilliSecs = 32; // 空闲检查间隔微妙
-            const int maxPulseCount = 128; // 最大脉冲数
+            //const long gapUsecs = 5000; // 缺口用例
+            //const long maxElapsedMicroseconds = 250000;
+            //const long minElapsedMicroseconds = 50;
+            //const int idleCheckIntervalMilliSecs = 32; // 空闲检查间隔微妙
+            //const int maxPulseCount = 128; // 最大脉冲数
 
-            // Setup the input pin
-            InputPin.PinMode = GpioPinDriveMode.Input;
-            InputPin.InputPullMode = GpioPinResistorPullMode.PullUp;
+            //// Setup the input pin
+            //InputPin.PinMode = GpioPinDriveMode.Input;
+            //InputPin.InputPullMode = GpioPinResistorPullMode.PullUp;
 
-            // Get the timers started!
-            var pulseTimer = new HighResolutionTimer(); // 脉冲时间
-            var idleTimer = new HighResolutionTimer();  // 空闲时间
+            //// Get the timers started!
+            //var pulseTimer = new HighResolutionTimer(); // 脉冲时间
+            //var idleTimer = new HighResolutionTimer();  // 空闲时间
 
-            var pulseBuffer = new List<InfraredPulse>(maxPulseCount);
-            var syncLock = new object();
+            //var pulseBuffer = new List<InfraredPulse>(maxPulseCount);
+            //var syncLock = new object();
 
-            _idleChecker = new Timer(s =>
-            {
-                if (_isDisposed || _isInReadInterrupt)
-                    return;
+            //_idleChecker = new Timer(s =>
+            //{
+            //    if (_isDisposed || _isInReadInterrupt)
+            //        return;
 
-                lock (syncLock)
-                {
-                    if (idleTimer.ElapsedMicroseconds < gapUsecs || idleTimer.IsRunning == false || pulseBuffer.Count <= 0)
-                        return;
+            //    lock (syncLock)
+            //    {
+            //        if (idleTimer.ElapsedMicroseconds < gapUsecs || idleTimer.IsRunning == false || pulseBuffer.Count <= 0)
+            //            return;
 
-                    OnInfraredSensorRawDataAvailable(pulseBuffer.ToArray(), ReceiverFlushReason.Idle);
-                    pulseBuffer.Clear();
-                    idleTimer.Reset();
-                }
-            });
+            //        OnInfraredSensorRawDataAvailable(pulseBuffer.ToArray(), ReceiverFlushReason.Idle);
+            //        pulseBuffer.Clear();
+            //        idleTimer.Reset();
+            //    }
+            //});
 
-            InputPin.RegisterInterruptCallback(EdgeDetection.FallingAndRisingEdge, () =>
-            {
-                if (_isDisposed) return;
+            //InputPin.RegisterInterruptCallback(EdgeDetection.FallingAndRisingEdge, () =>
+            //{
+            //    if (_isDisposed) return;
 
-                _isInReadInterrupt = true;
+            //    _isInReadInterrupt = true;
 
-                lock (syncLock)
-                {
-                    idleTimer.Restart();
-                    _idleChecker.Change(idleCheckIntervalMilliSecs, idleCheckIntervalMilliSecs);
+            //    lock (syncLock)
+            //    {
+            //        idleTimer.Restart();
+            //        _idleChecker.Change(idleCheckIntervalMilliSecs, idleCheckIntervalMilliSecs);
 
-                    var currentLength = pulseTimer.ElapsedMicroseconds;
-                    var pulse = new InfraredPulse(
-                        IsActiveLow ? !_currentValue : _currentValue,
-                        currentLength.Clamp(minElapsedMicroseconds, maxElapsedMicroseconds));
+            //        var currentLength = pulseTimer.ElapsedMicroseconds;
+            //        var pulse = new InfraredPulse(
+            //            IsActiveLow ? !_currentValue : _currentValue,
+            //            currentLength.Clamp(minElapsedMicroseconds, maxElapsedMicroseconds));
 
-                    // Restart for the next bit coming in
-                    pulseTimer.Restart();
+            //        // Restart for the next bit coming in
+            //        pulseTimer.Restart();
 
-                    // For the next value
-                    _currentValue = InputPin.Read();
+            //        // For the next value
+            //        _currentValue = InputPin.Read();
 
-                    // Do not add an idling pulse
-                    if (pulse.DurationUsecs < maxElapsedMicroseconds)
-                    {
-                        pulseBuffer.Add(pulse);
-                        OnInfraredSensorPulseAvailable(pulse);
-                    }
+            //        // Do not add an idling pulse
+            //        if (pulse.DurationUsecs < maxElapsedMicroseconds)
+            //        {
+            //            pulseBuffer.Add(pulse);
+            //            OnInfraredSensorPulseAvailable(pulse);
+            //        }
 
-                    if (pulseBuffer.Count >= maxPulseCount)
-                    {
-                        OnInfraredSensorRawDataAvailable(pulseBuffer.ToArray(), ReceiverFlushReason.Overflow);
-                        pulseBuffer.Clear();
-                    }
-                }
+            //        if (pulseBuffer.Count >= maxPulseCount)
+            //        {
+            //            OnInfraredSensorRawDataAvailable(pulseBuffer.ToArray(), ReceiverFlushReason.Overflow);
+            //            pulseBuffer.Clear();
+            //        }
+            //    }
 
-                _isInReadInterrupt = false;
-            });
+            //    _isInReadInterrupt = false;
+            //});
 
-            // Get the timers started
-            pulseTimer.Start();
-            idleTimer.Start();
-            _idleChecker.Change(0, idleCheckIntervalMilliSecs);
+            //// Get the timers started
+            //pulseTimer.Start();
+            //idleTimer.Start();
+            //_idleChecker.Change(0, idleCheckIntervalMilliSecs);
         }
 
         /// <summary>

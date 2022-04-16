@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Unosquare.RaspberryIO;
-using Unosquare.RaspberryIO.Camera;
+//using Unosquare.RaspberryIO;
+//using Unosquare.RaspberryIO.Camera;
 
 namespace WebIoT.Playground.Media
 {
@@ -17,22 +17,22 @@ namespace WebIoT.Playground.Media
             var startTime = DateTime.UtcNow;
 
             // Configure video settings
-            var videoSettings = new CameraVideoSettings()
-            {
-                CaptureTimeoutMilliseconds = 0,
-                CaptureDisplayPreview = false,
-                ImageFlipVertically = true,
-                CaptureExposure = CameraExposureMode.Night,
-                CaptureWidth = 1920,
-                CaptureHeight = 1080
-            };
+            //var videoSettings = new CameraVideoSettings()
+            //{
+            //    CaptureTimeoutMilliseconds = 0,
+            //    CaptureDisplayPreview = false,
+            //    ImageFlipVertically = true,
+            //    CaptureExposure = CameraExposureMode.Night,
+            //    CaptureWidth = 1920,
+            //    CaptureHeight = 1080
+            //};
 
             try
             {
                 // Start the video recording
-                Pi.Camera.OpenVideoStream(videoSettings,
-                    onDataCallback: (data) => { videoByteCount += data.Length; videoEventCount++; },
-                    onExitCallback: null);
+                //Pi.Camera.OpenVideoStream(videoSettings,
+                //    onDataCallback: (data) => { videoByteCount += data.Length; videoEventCount++; },
+                //    onExitCallback: null);
 
                 // Wait for user interaction
                 startTime = DateTime.UtcNow;
@@ -46,7 +46,7 @@ namespace WebIoT.Playground.Media
             finally
             {
                 // Always close the video stream to ensure raspivid quits
-                Pi.Camera.CloseVideoStream();
+                //Pi.Camera.CloseVideoStream();
 
                 // Output the stats
                 var megaBytesReceived = (videoByteCount / (1024f * 1024f)).ToString("0.000");

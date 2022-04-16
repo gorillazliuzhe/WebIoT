@@ -1,60 +1,57 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace WebIoT.Filter
 {
+    /// <summary>
+    /// 全局异常过滤器
+    /// </summary>
     public class GlobalExceptionFilter : IAsyncExceptionFilter
     {
-        private readonly ILogger _logger; 
-        public GlobalExceptionFilter(ILoggerFactory loggerFactory)
+        private readonly IWebHostEnvironment _env;
+        private readonly ILogger<GlobalExceptionFilter> _logger;
+
+        public GlobalExceptionFilter(ILogger<GlobalExceptionFilter> logger, IWebHostEnvironment env)
         {
-            _logger = loggerFactory.CreateLogger<GlobalExceptionFilter>();
+            _env = env;
+            _logger = logger;
         }
         public async Task OnExceptionAsync(ExceptionContext context)
         {
-            await Task.Run(() =>
+            if (context.Exception == null) return;
+            var json = new ErrorResponse
             {
-                var json = new ErrorResponse("未知错误,请重试")
+                Name = context.ActionDescriptor.GetType().GetProperty("ActionName")?.GetValue(context.ActionDescriptor)?.ToString(),
+                Path = context.HttpContext.Request.Path,
+                Msg = context.Exception.ToString()
+            };
+            if (!(context.Exception is TaskCanceledException) && !(context.Exception is OperationCanceledException))
+            {
+                var errormsg = JsonConvert.SerializeObject(json);
+                _logger.LogError(new EventId(context.Exception.HResult), context.Exception, errormsg);
+                if (!_env.IsDevelopment())
                 {
-                    Name = context.ActionDescriptor.GetType().GetProperty("ActionName")?.GetValue(context.ActionDescriptor).ToString(),
-                    Path = $"链接访问出错：{context.HttpContext.Request.Path}",
-                    Msg = context.Exception.Message,
-                    // Data = context.Exception // 会使System.Text.Jso序列化失败
-                };
-                if (context.Exception is OperationCanceledException)
-                {
-                    json.Msg = "一个请求在浏览器被取消";
-                    context.ExceptionHandled = true;
-                    context.Result = new StatusCodeResult(400);
-                }
-                else
-                {
-                    _logger.LogError(new EventId(context.Exception.HResult), context.Exception, System.Text.Json.JsonSerializer.Serialize(json));
                     context.Result = new RedirectResult("/Home/Error");
                     context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.ExceptionHandled = true; //设置异常已经处理,否则会被其他异常过滤器覆盖
+                    context.ExceptionHandled = true;   //设置异常已经处理,否则会被其他异常过滤器覆盖,这样页面将不会展示异常[黄页面]
                 }
-            });
+            }
+            await Task.CompletedTask;
         }
     }
+
     public class ErrorResponse
     {
-        public ErrorResponse(string msg)
-        {
-            Msg = msg;
-        }
-
-        public int Status { get; set; } = 0;
-
+        public int Status { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
         public string Msg { get; set; }
-        public object Data { get; set; }
     }
 }

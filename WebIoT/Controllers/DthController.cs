@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
-using Unosquare.RaspberryIO;
-using Unosquare.RaspberryIO.Peripherals;
+//using Unosquare.RaspberryIO;
+//using Unosquare.RaspberryIO.Peripherals;
 using WebIoT.Hubs;
 using WebIoT.Models;
 
@@ -38,14 +38,15 @@ namespace WebIoT.Controllers
             //        Thread.Sleep(2000);
             //    }
             //}, cancellationToken);
-            var sensor = DhtSensor.Create(DhtType.Dht22, Pi.Gpio[_dthpin]);
-            sensor.OnDataAvailable += async (s, e) =>
-            {
-                if (!e.IsValid)
-                    return;
-                await _chatHub.Clients.All.SendAsync("ReceiveMessage", "dth", $"{e.Temperature:0.00}#{e.HumidityPercentage:00.0}");
-            };
-            sensor.Start();
+
+            //var sensor = DhtSensor.Create(DhtType.Dht22, Pi.Gpio[_dthpin]);
+            //sensor.OnDataAvailable += async (s, e) =>
+            //{
+            //    if (!e.IsValid)
+            //        return;
+            //    await _chatHub.Clients.All.SendAsync("ReceiveMessage", "dth", $"{e.Temperature:0.00}#{e.HumidityPercentage:00.0}");
+            //};
+            //sensor.Start();
             return View();
         }
     }

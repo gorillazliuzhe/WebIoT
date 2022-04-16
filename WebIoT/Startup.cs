@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Device.Gpio;
-using Unosquare.RaspberryIO;
+//using Unosquare.RaspberryIO;
 using WebIoT.Filter;
 using WebIoT.Hubs;
 using WebIoT.Models;
@@ -57,7 +57,7 @@ namespace WebIoT
             app.UseStaticFiles();
             try
             {
-                Pi.Init<Unosquare.WiringPi.BootstrapWiringPi>();
+                //Pi.Init<Unosquare.WiringPi.BootstrapWiringPi>();
             }
             catch
             {

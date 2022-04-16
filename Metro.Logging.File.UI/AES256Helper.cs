@@ -14,18 +14,15 @@ namespace Metro.Logging.File.UI
         /// <returns></returns>
         public static string Encrypt(string encryptStr, byte[] key)
         {
-            byte[] toEncryptArray = Encoding.UTF8.GetBytes(encryptStr);
-            var rDel = new RijndaelManaged
-            {
-                Key = key,
-                Mode = CipherMode.ECB,
-                Padding = PaddingMode.PKCS7
-            };
-            var cTransform = rDel.CreateEncryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+            var sourceBytes = Encoding.UTF8.GetBytes(encryptStr);
+            var aes = Aes.Create();
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = PaddingMode.PKCS7;
+            aes.Key = key;
+            //aes.IV = Encoding.UTF8.GetBytes(iv);
+            var transform = aes.CreateEncryptor();
+            return Convert.ToBase64String(transform.TransformFinalBlock(sourceBytes, 0, sourceBytes.Length));
         }
-
         /// <summary>
         /// AES解密
         /// </summary>
@@ -34,16 +31,14 @@ namespace Metro.Logging.File.UI
         /// <returns></returns>
         public static string Decrypt(string decryptStr, byte[] key)
         {
-            byte[] toEncryptArray = Convert.FromBase64String(decryptStr);
-            var rDel = new RijndaelManaged
-            {
-                Key = key,
-                Mode = CipherMode.ECB,
-                Padding = PaddingMode.PKCS7
-            };
-            var cTransform = rDel.CreateDecryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            return Encoding.UTF8.GetString(resultArray);
-        }
+            var encryptBytes = Convert.FromBase64String(decryptStr);
+            var aes = Aes.Create();
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = PaddingMode.PKCS7;
+            aes.Key = key;
+            //aes.IV = Encoding.UTF8.GetBytes(iv);
+            var transform = aes.CreateDecryptor();
+            return Encoding.UTF8.GetString(transform.TransformFinalBlock(encryptBytes, 0, encryptBytes.Length));
+        }            
     }
 }
