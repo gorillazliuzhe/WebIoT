@@ -24,18 +24,18 @@ namespace WebIoT.Controllers
         }
         public IActionResult Index(CancellationToken cancellationToken)
         {
-            Task.Run(async () => // 会出现Nan情况
-            {
-                using Iot.Device.DHTxx.Dht22 dht = new Iot.Device.DHTxx.Dht22(_dthpin);
-                while (true)
-                {
-                    await Task.Delay(5000);
-                    if (dht.TryReadTemperature(out UnitsNet.Temperature temperature) && dht.TryReadHumidity(out UnitsNet.RelativeHumidity humidity))
-                    {
-                        await _chatHub.Clients.All.SendAsync("ReceiveMessage", "dth", $"{temperature:0.00} # {humidity:00.0}", cancellationToken);
-                    }
-                }
-            });
+            //Task.Run(async () => // 会出现Nan情况
+            //{
+            //    using Iot.Device.DHTxx.Dht22 dht = new Iot.Device.DHTxx.Dht22(_dthpin);
+            //    while (true)
+            //    {
+            //        await Task.Delay(5000);
+            //        if (dht.TryReadTemperature(out UnitsNet.Temperature temperature) && dht.TryReadHumidity(out UnitsNet.RelativeHumidity humidity))
+            //        {
+            //            await _chatHub.Clients.All.SendAsync("ReceiveMessage", "dth", $"{temperature:0.00} # {humidity:00.0}", cancellationToken);
+            //        }
+            //    }
+            //});
 
             //var sensor = DhtSensor.Create(DhtType.Dht22, Pi.Gpio[_dthpin]);
             //sensor.OnDataAvailable += async (s, e) =>

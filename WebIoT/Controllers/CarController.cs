@@ -35,18 +35,18 @@ namespace WebIoT.Controllers
 
             #region 温度湿度
 
-            Task.Run(async () => // 会出现Nan情况
-            {
-                using Iot.Device.DHTxx.Dht22 dht = new Iot.Device.DHTxx.Dht22(_dthpin);
-                while (true)
-                {
-                    await Task.Delay(5000);
-                    if (dht.TryReadTemperature(out UnitsNet.Temperature temperature) && dht.TryReadHumidity(out UnitsNet.RelativeHumidity humidity))
-                    {
-                        await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{temperature:0.00} # {humidity:00.0}", cancellationToken);
-                    }         
-                }
-            });
+            //Task.Run(async () => // 会出现Nan情况
+            //{
+            //    using Iot.Device.DHTxx.Dht22 dht = new Iot.Device.DHTxx.Dht22(_dthpin);
+            //    while (true)
+            //    {
+            //        await Task.Delay(5000);
+            //        if (dht.TryReadTemperature(out UnitsNet.Temperature temperature) && dht.TryReadHumidity(out UnitsNet.RelativeHumidity humidity))
+            //        {
+            //            await _chatHub.Clients.All.SendAsync("ReceiveMessage", "4", $"{temperature:0.00} # {humidity:00.0}", cancellationToken);
+            //        }         
+            //    }
+            //});
 
             //Task.Run(() =>  // 第三方库,没有NAN情况
             //{
